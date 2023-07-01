@@ -1,8 +1,9 @@
 /* eslint-disable @next/next/no-img-element */
-import React from "react";
-import Carousel from "react-multi-carousel";
-import "react-multi-carousel/lib/styles.css";
 import Image from "next/image";
+import Link from "next/link";
+import "react-multi-carousel/lib/styles.css";
+import AFCCarousel from "./AFCCarousel";
+import { PlayCasinoLink } from "./PlayCasinoLink";
 const responsive = {
   superLargeDesktop: {
     // the naming can be any, depends on you.
@@ -22,27 +23,22 @@ const responsive = {
     items: 1,
   },
 };
-import Link from "next/link";
-import AFCCarousel from "./AFCCarousel";
 const BonusSlider = ({ casinos, FaArrowCircleRight }) => {
   return (
-    <div className="border items-center border-gray-300 p-2 rounded my-4 min-h-42">
-      <AFCCarousel
-        responsive={responsive}
-      >
+    <div className="min-h-42 my-4 items-center rounded border border-gray-300 p-2">
+      <AFCCarousel responsive={responsive}>
         {casinos?.map((c, index) => (
           // eslint-disable-next-line react/jsx-no-comment-textnodes
           <div
-            className="border border-gray-300 p-6 rounded my-4 m-1"
+            className="m-1 my-4 rounded border border-gray-300 p-6"
             key={index}
           >
             <div className=" p-5">
               <Image
+                unoptimized
                 height="80"
                 width="100"
-                src={`https://www.allfreechips.com/image/casinoiconscut/${encodeURIComponent(
-                  c.button
-                )}`}
+                src={`/image/casinoiconscut/${encodeURIComponent(c.button)}`}
                 alt={c.casino + "image"}
               />
             </div>
@@ -54,18 +50,13 @@ const BonusSlider = ({ casinos, FaArrowCircleRight }) => {
               {c.fstext}
             </div>
             <span>
-              <Link
-                rel="nofollow"
-                target="_blank"
-                href={`https://allfreechips.com/play_casino${encodeURIComponent(
-                  c.id
-                )}.html`}
-                type="button"
-                className="flex rounded bg-sky-700 text-white dark:bg-white dark:text-black py-3 my-4 justify-center items-center font-bold md:px-8"
+              <PlayCasinoLink
+                casinoId={c.clean_name}
+                className="my-4 flex items-center justify-center rounded bg-sky-700 py-3 font-bold text-white md:px-8 dark:bg-white dark:text-black"
               >
                 Play Now
                 {FaArrowCircleRight}
-              </Link>
+              </PlayCasinoLink>
             </span>
           </div>
         ))}

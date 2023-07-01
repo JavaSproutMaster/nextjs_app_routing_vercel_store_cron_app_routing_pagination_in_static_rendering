@@ -1,7 +1,4 @@
-import React from "react";
-import Casino from "./Casino";
 import Link from "next/link";
-import { FaMedal } from "react-icons/fa";
 import SoftBox from "./SoftBox";
 const SlotSoftware = (data) => {
   const dataS = data.casSoft;
@@ -16,12 +13,12 @@ const SlotSoftware = (data) => {
         {dataS?.map(function (d, id) {
           let url = "../software/" + d.link;
           return (
-            <Link key= {d.id} href={url}>
+            <Link key={d.id} href={url}>
               <SoftBox
-                image = {d.img}
-                title= {d.name}
-                count = {d.count}
-                games= {d.games}
+                image={d.img}
+                title={d.name}
+                count={d.count}
+                games={d.games}
               />
             </Link>
           );

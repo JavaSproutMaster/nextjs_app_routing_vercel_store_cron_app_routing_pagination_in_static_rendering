@@ -1,11 +1,11 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import SelectRating from "./SelectRating";
 
 interface Props {
-  show: boolean,
-  type: number,
-  parentId: number,
+  show: boolean;
+  type: number;
+  parentId: number;
   setShow: (boolean) => void;
   saveRating: (message: any) => void;
 }

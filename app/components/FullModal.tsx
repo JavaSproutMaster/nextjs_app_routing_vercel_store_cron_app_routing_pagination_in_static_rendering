@@ -1,46 +1,97 @@
-import React from 'react';
+"use client";
 
-export default function FullModal({children, setShow, searchKey, search, changeVal}) {
+import { useRouter, useSearchParams } from "next/navigation";
+import { useEffect, useRef, useState } from "react";
 
-    const toggle = (e) => {
-        e.preventDefault();
-        setShow(false);
+export default function FullModal({ children }) {
+  const searchParams = useSearchParams();
+
+  const showSearchModal = searchParams?.get("showSearchModal");
+  const title = searchParams?.get("searchKey");
+  const [key, setKey] = useState("");
+  const refTool = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    if (title) {
+      setKey(title);
     }
+  }, [title]);
 
-    return (
-        <div id="modal" className="fixed z-50 inset-0 bg-gray-900 bg-opacity-60 overflow-y-auto h-full w-full px-4 modal">
-            <div className="relative mx-auto shadow-xl rounded-md bg-white max-w-md">
+  const router = useRouter();
+  const toggle = (e) => {
+    e.preventDefault();
+    router.push(window.location.pathname);
+  };
 
-                <div className="flex items-start justify-between p-5 rounded-t">
-                    <div className="md:basis-1/4 flex items-center justify-start space-x-4 ml-2 mt-2">
-                        <div className="relative text-current">
-                            <form action={search}>
-                                <input 
-                                    type="search" 
-                                    name="serch"
-                                    value={searchKey}
-                                    onChange={e => changeVal(e)}
-                                    placeholder="Search"
-                                    className="bg-gray h-10 sm:w-40 md:w-48 px-5 pr-10 border-2 border-gray-500 hover:border-current rounded-full text-md focus:outline-none" />
-                                
-                                <button type="submit" className="absolute right-0 top-0 mt-3 mr-4">
-                                    <svg className="h-4 w-4 fill-current" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" version="1.1" id="Capa_1" x="0px" y="0px" viewBox="0 0 56.966 56.966" style={{background:"new 0 0 56.966 56.966"}} xmlSpace="preserve" width="512px" height="512px">
-                                    <path d="M55.146,51.887L41.588,37.786c3.486-4.144,5.396-9.358,5.396-14.786c0-12.682-10.318-23-23-23s-23,10.318-23,23  s10.318,23,23,23c4.761,0,9.298-1.436,13.177-4.162l13.661,14.208c0.571,0.593,1.339,0.92,2.162,0.92  c0.779,0,1.518-0.297,2.079-0.837C56.255,54.982,56.293,53.08,55.146,51.887z M23.984,6c9.374,0,17,7.626,17,17s-7.626,17-17,17  s-17-7.626-17-17S14.61,6,23.984,6z"/>
-                                    </svg>
-                                </button>
-                            </form>
-                        </div>
-                    </div>
-                    <button onClick={e=> toggle(e)}>x</button>
-                </div>
+  const search = () => {
+    router.push("?showSearchModal=true&searchKey=" + key);
+  };
 
-                <div className="max-h-3/4 overflow-y-scroll px-4">
-                    {children}
+  const changeVal = (e) => {
+    e.preventDefault();
+    setKey(e.target.value);
+  };
+
+  return (
+    <>
+      {showSearchModal && (
+        <div
+          className="modal fixed inset-0 z-50 h-full w-full overflow-y-auto bg-gray-900 bg-opacity-60 px-4"
+          ref={refTool}
+        >
+          <div className="max-w-md relative mx-auto rounded-md bg-white shadow-xl">
+            <div className="flex items-start justify-between rounded-t p-5">
+              <div className="ml-2 mt-2 flex items-center justify-start space-x-4 md:basis-1/4">
+                <div className="relative text-current">
+                  <form action={search}>
+                    <input
+                      type="search"
+                      name="serch"
+                      id="search"
+                      value={key}
+                      onChange={(e) => changeVal(e)}
+                      placeholder="Search"
+                      className="bg-gray text-md h-10 rounded-full border-2 border-gray-500 px-5 pr-10 hover:border-current focus:outline-none sm:w-40 md:w-48"
+                    />
+
+                    <button
+                      type="submit"
+                      className="absolute right-0 top-0 mr-4 mt-3 dark:text-zinc-900"
+                    >
+                      <svg
+                        className="h-4 w-4 fill-current"
+                        xmlns="http://www.w3.org/2000/svg"
+                        xmlnsXlink="http://www.w3.org/1999/xlink"
+                        version="1.1"
+                        id="Capa_1"
+                        x="0px"
+                        y="0px"
+                        viewBox="0 0 56.966 56.966"
+                        style={{ background: "new 0 0 56.966 56.966" }}
+                        xmlSpace="preserve"
+                        width="512px"
+                        height="512px"
+                      >
+                        <path d="M55.146,51.887L41.588,37.786c3.486-4.144,5.396-9.358,5.396-14.786c0-12.682-10.318-23-23-23s-23,10.318-23,23  s10.318,23,23,23c4.761,0,9.298-1.436,13.177-4.162l13.661,14.208c0.571,0.593,1.339,0.92,2.162,0.92  c0.779,0,1.518-0.297,2.079-0.837C56.255,54.982,56.293,53.08,55.146,51.887z M23.984,6c9.374,0,17,7.626,17,17s-7.626,17-17,17  s-17-7.626-17-17S14.61,6,23.984,6z" />
+                      </svg>
+                    </button>
+                  </form>
                 </div>
-                <div className="px-4 flex justify-end items-center space-x-4 py-4">
-                    <button className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition" onClick={e=> toggle(e)}>Go Back</button>
-                </div>
+              </div>
+              <button onClick={(e) => toggle(e)}>x</button>
             </div>
+
+            <div className="max-h-3/4 overflow-y-scroll px-4">{children}</div>
+            <div className="flex items-center justify-end space-x-4 px-4 py-4">
+              <button
+                className="rounded-md bg-blue-500 px-4 py-2 text-white transition hover:bg-blue-700"
+                onClick={(e) => toggle(e)}
+              >
+                Go Back
+              </button>
+            </div>
+          </div>
         </div>
-    );
+      )}
+    </>
+  );
 }

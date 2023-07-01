@@ -1,6 +1,4 @@
-import Image from "next/image";
 import Link from "next/link";
-import React from "react";
 import { FaArrowCircleRight } from "react-icons/fa";
 const TimeForNewCasino = () => {
   return (
@@ -18,10 +16,10 @@ const TimeForNewCasino = () => {
         </div>
       </div>
       <Link href="./casino-match">
-      <div className=" cursor-pointer w-full md:col-span-1  sm:col-span-1 xs-col-span-3 bg-white rounded-lg flex md:justify-evenly justify-center items-center px-8 font-bold">
-        <span className=" text-[#0369a1] ">See my match</span>
-        <FaArrowCircleRight className="mx-2" />
-      </div>
+        <div className=" cursor-pointer w-full md:col-span-1  sm:col-span-1 xs-col-span-3 bg-white rounded-lg flex md:justify-evenly justify-center items-center px-8 font-bold">
+          <span className=" text-[#0369a1] ">See my match</span>
+          <FaArrowCircleRight className="mx-2" />
+        </div>
       </Link>
     </div>
   );

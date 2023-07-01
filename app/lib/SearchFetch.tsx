@@ -13,7 +13,7 @@ export async function getCount(type, key) {
                   some: {
                     title: {
                       contains: key,
-                      mode: 'insensitive',
+                      mode: "insensitive",
                     },
                   },
                 },
@@ -21,13 +21,13 @@ export async function getCount(type, key) {
               {
                 casino: {
                   contains: key,
-                  mode: 'insensitive',
+                  mode: "insensitive",
                 },
               },
             ],
           },
-        })
-        
+        });
+
         return count;
       } catch (err) {
         console.log(err);
@@ -44,7 +44,7 @@ export async function getCount(type, key) {
                   some: {
                     title: {
                       contains: key,
-                      mode: 'insensitive',
+                      mode: "insensitive",
                     },
                   },
                 },
@@ -52,19 +52,19 @@ export async function getCount(type, key) {
               {
                 game_name: {
                   contains: key,
-                  mode: 'insensitive',
+                  mode: "insensitive",
                 },
               },
               {
-                slot_theme:{
-                  some:{
+                slot_theme: {
+                  some: {
                     theme: {
                       contains: key,
-                      mode: 'insensitive'
-                    }
-                  }
-                }
-              }
+                      mode: "insensitive",
+                    },
+                  },
+                },
+              },
             ],
           },
         });
@@ -92,7 +92,7 @@ export async function searchData(type, key, firstPageIndex) {
           },
           where: {
             approved: 1,
-            rogue : 0,
+            rogue: 0,
             OR: [
               // {
               //   meta: {
@@ -109,7 +109,7 @@ export async function searchData(type, key, firstPageIndex) {
                   some: {
                     title: {
                       contains: key,
-                      mode: 'insensitive',
+                      mode: "insensitive",
                     },
                   },
                 },
@@ -123,7 +123,7 @@ export async function searchData(type, key, firstPageIndex) {
               {
                 casino: {
                   contains: key,
-                  mode: 'insensitive',
+                  mode: "insensitive",
                 },
               },
             ],
@@ -167,7 +167,7 @@ export async function searchData(type, key, firstPageIndex) {
                   some: {
                     title: {
                       contains: key,
-                      mode: 'insensitive',
+                      mode: "insensitive",
                     },
                   },
                 },
@@ -181,19 +181,19 @@ export async function searchData(type, key, firstPageIndex) {
               {
                 game_name: {
                   contains: key,
-                  mode: 'insensitive',
+                  mode: "insensitive",
                 },
               },
               {
-                slot_theme:{
-                  some:{
+                slot_theme: {
+                  some: {
                     theme: {
                       contains: key,
-                      mode: 'insensitive'
-                    }
-                  }
-                }
-              }
+                      mode: "insensitive",
+                    },
+                  },
+                },
+              },
             ],
           },
           take: 5,

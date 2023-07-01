@@ -1,23 +1,19 @@
-
-import SlotSoftware from "@/components/SlotSoftware";
-import Link from "next/link";
-import { FaAngleRight } from "react-icons/fa";
-import Author from "@/components/AboutAuthor";
-import monthYear from "@/components/functions/monthYear";
 import prisma from "@/client";
+import Author from "@/components/AboutAuthor";
+import SlotSoftware from "@/components/SlotSoftware";
+import monthYear from "@/components/functions/monthYear";
 
 import { Metadata } from "next";
 export async function generateMetadata({ params }): Promise<Metadata> {
-    const Title =
-      "Complete list of online casino and slot software providers";
-    const description =
-      "Allfreechips complete guide to online casino software providers along with casinos and slots that use those softwares";
-    return {
-      title: Title,
-      description: description,
-    };
-  }
-  
+  const Title = "Casino Software Online - Gambling Software | Allfreechips";
+  const description =
+    "Elevate your online gaming with cutting-edge casino software. Experience seamless play, captivating graphics, and a diverse game selection. Dive into excellence with our top-notch online casino software. Play smarter, play better.";
+  return {
+    metadataBase: new URL("https://www.allfreechips.com"),
+    title: Title,
+    description: description,
+  };
+}
 
 async function getProps() {
   const data = await prisma.casino_p_software.findMany({
@@ -32,13 +28,14 @@ async function getProps() {
   const numdata: any[] = await prisma.$queryRawUnsafe(
     `SELECT  m.id,CAST(sum(case when mp.casino is not null then 1 else 0 end) as INT) as coun FROM casino_p_software m
     LEFT JOIN casino_p_software_link mp ON mp.software = m.id
-    GROUP BY m.id`
+    GROUP BY m.id`,
   );
+
   // get the number of games for each software
   const numGames: any[] = await prisma.$queryRawUnsafe(
     `SELECT m.id, CAST(sum(case when mp.game_software is not null then 1 else 0 end) as INT) as coun FROM casino_p_software m
     LEFT JOIN casino_p_games mp ON mp.game_software = m.id
-    GROUP BY m.id`
+    GROUP BY m.id`,
   );
   function sortByKey(array, key) {
     return array.sort(function (a, b) {
@@ -75,11 +72,11 @@ async function getProps() {
   const casSoft = newData.reverse();
 
   const softFull = mergeOnId(casSoft, data, numGames);
-  //console.log(softFull);
+
   return { softFull };
 }
 
-export default async function  PageOut ({params}) {
+export default async function PageOut({ params }) {
   const props = await getProps();
   const author = "AFC Chris";
   const reviewDate = "";
@@ -88,62 +85,75 @@ export default async function  PageOut ({params}) {
   const authorData = { author, authorText };
   const casSoft = props.softFull;
 
-/*
+  /*
      <Head>
         <title>Best casino software Providors</title>
         <meta name="description" content="Description Of Page" />
       </Head>
       */
- 
+
   return (
-      <div className="md:container mx-auto text-sky-700 dark:text-white">
+    <div className="mx-auto text-sky-700 md:container dark:text-white">
+      <section className="px-6  py-8">
+        <div className="container mx-auto">
+          <h1 className="border-b border-blue-800 pb-12 text-4xl font-semibold md:text-5xl dark:border-white">
+            Best {monthYear()} Casino Software Providors
+          </h1>
 
-        <section className="py-8  px-6">
-          <div className="container mx-auto">
-            <h1 className="text-4xl md:text-5xl font-semibold border-b border-blue-800 dark:border-white pb-12">
-              Best {monthYear()} Casino Software Providors
-            </h1>
-            <div className="flex flex-col py-4">
-              <span className="">
-                Author:{" "}
-                <a href="" className="font-medium ">
-                  {author}
-                </a>
-              </span>
-              <span className="text-sky-600 dark:text-white">{reviewDate}</span>
-            </div>
-            <div className="bg-slate-100 dark:bg-gray-200 dark:text-black rounded-xl mt-3">
-              <div className="card p-4">
-                <div className="heading flex items-center border-b gap-7 pb-4">
-                  <button className="w-10 h-7 rounded bg-sky-700 dark:bg-zinc-800"></button>
-                  <h2 className="text-lg">
-                    Why you can trust{" "}
-                    <span className="font-bold">allfreechips.com</span>
-                  </h2>
-                  <a href="#">
-                    <i className="bi bi-info-circle"></i>
-                  </a>
-                </div>
-                <p className="font-normal pt-4 pb-2 text-justify md:text-xl md:p-6">
-                  Allfreechips is dedicated to bringing the best and latest
-                  online casino bonus information. We rely on your input to
-                  insure the casinos listed here are both correct and on the
-                  level by leaving your reviews.
-                </p>
+          {/* <div className="bg-slate-100 dark:bg-gray-200 dark:text-black rounded-xl mt-3">
+            <div className="card p-4">
+              <div className="heading flex items-center border-b gap-7 pb-4">
+                <span className="w-10 h-7 rounded bg-sky-700 dark:bg-zinc-800"></span>
+                <h2 className="text-lg">
+                  Why you can trust{" "}
+                  <span className="font-bold">allfreechips.com</span>
+                </h2>
               </div>
+              <p className="font-normal pt-4 pb-2 text-justify md:text-xl md:p-6">
+                Allfreechips is dedicated to bringing the best and latest online
+                casino bonus information. We rely on your input to insure the
+                casinos listed here are both correct and on the level by leaving
+                your reviews.
+              </p>
             </div>
-          </div>
-        </section>
-          <div className="text-lg md:text-xl font-medium">
-            <SlotSoftware casSoft={casSoft} />
-            <div>
-              <Author data={authorData} />
-            </div>
-          </div>
-      
+          </div> */}
+        </div>
+      </section>
+      <div className="text-lg font-medium md:text-xl">
+        <SlotSoftware casSoft={casSoft} />
+        <div className="mt-2 p-4 text-left md:mx-24 md:text-2xl">
+          <h3 className="text-2xl font-semibold md:text-5xl">
+            Best Online casino software
+          </h3>
+          <p className="my-6 text-justify text-base font-medium md:text-2xl md:font-normal">
+            A lot goes into trying to decide what is the best online casino
+            software, there are many reasons one would prefer one over another.
+            Of course my first vote would go towards the casino software that
+            pays out the most but with many independent audits out there I do
+            not believe there is a clear winner on this. Second would be the
+            trust factor, over the years there have been a few software brands
+            that where found to be no so on the level and were quickly called
+            out and we never saw them again. But the best way I decide on the
+            best is if I feel both safe and secure while playing, and have a
+            good time as well. Effort in the user experience is very important
+            these days with the amount of slot machines available.
+          </p>
+          <h4 className="text-2xl font-semibold md:text-5xl">
+            USA online casino software
+          </h4>
+          <p className="my-6 text-justify text-base font-medium md:text-2xl md:font-normal">
+            With the regulations way back in 2006 we lost a lot of games and
+            casinos in the USA like Microgaming, Playtech and a few others. THis
+            was quite depressing as these were considered the very best at the
+            time. Fortunately today we have Saucify, RTG still and quite a few
+            others delivering great fun slots and table games in the US.
+          </p>
+        </div>
+
+        <div>
+          <Author data={authorData} />
+        </div>
       </div>
-
+    </div>
   );
-};
-
-
+}

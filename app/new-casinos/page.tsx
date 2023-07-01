@@ -1,23 +1,37 @@
-import Link from "next/link";
-import { CgMenuLeft } from "react-icons/cg";
-import { FaAngleRight } from "react-icons/fa";
-import { GrClose } from "react-icons/gr";
-import Author from "@/components/AboutAuthor";
+import prisma from "@/client";
+import Bonus3 from "@/components/Bonus3";
+import FaqJsonLD from "@/components/FaqJsonLDX";
+import ProSchema from "@/components/ProJsonLDX";
+import ProsCons from "@/components/ProsCons";
 import Faq from "@/components/faq";
 import BonusFilter from "@/components/functions/bonusfilter";
 import monthYear from "@/components/functions/monthYear";
-import ProsCons from "@/components/ProsCons";
-import FaqJsonLD from "@/components/FaqJsonLDX";
-import CasinoDisplayList from "@/components/CasinoDisplayList";
-import prisma from "@/client";
-import MobileJump from "../components/MobileJump";
 import { Metadata } from "next";
-import ProSchema from "@/components/ProJsonLDX";
+import Link from "next/link";
+import { CgMenuLeft } from "react-icons/cg";
+import { GrClose } from "react-icons/gr";
+import MobileJump from "../components/MobileJump";
+import { revalidatePath } from "next/cache";
+import { LoadMoreButton } from "../components/loadMoreButton";
+export const revalidate = 3000;
+let casinoNum = 1;
+
+async function loadMoreCasino(formData) {
+  "use server";
+
+  casinoNum = Number(formData.get("casinoNumber")) + 1;
+  revalidatePath("CURRENT PAGE");
+}
+
 async function getProps({ params }) {
+  let casTake = casinoNum * 15;
   const data = await prisma.casino_p_casinos.findMany({
     where: {
       approved: 1,
       rogue: 0,
+      vercel_image_url: { not: null },
+      vercel_casino_button: { not: null },
+
       // bonuses: { some: {  multi_currency: { contains:  '4' }, } },  // BTC IS #4
     },
     select: {
@@ -32,12 +46,12 @@ async function getProps({ params }) {
       },
       casino_ratings: {
         select: {
-          rating: true
-        }
-      }
+          rating: true,
+        },
+      },
     },
-    orderBy: [{ id: "desc" }],
-    take: 30,
+    orderBy: { id: "desc" },
+    take: casTake,
   });
 
   const bdata: any[] = data.filter((p) => p.bonuses.length > 0);
@@ -52,6 +66,7 @@ export async function generateMetadata({ params }): Promise<Metadata> {
     monthYear() +
     " online casinos";
   return {
+    metadataBase: new URL("https://www.allfreechips.com"),
     title: Title,
     description: Description,
   };
@@ -107,35 +122,28 @@ export default async function PageOut({ params }) {
   ];
 
   return (
-    <div className="md:container mx-auto text-sky-700 dark:text-white">
+    <div className="mx-auto text-sky-700 md:container dark:text-white">
       <FaqJsonLD data={faq} />
-      <ProSchema prosCons = {prosCons} name = "New Casinos" product ="New Casino List" />
-      <section className="py-8  px-6">
+      <ProSchema
+        prosCons={prosCons}
+        name="New Casinos"
+        product="New Casino List"
+      />
+      <section className="px-6  py-8">
         <div className="container mx-auto">
-          <h1 className="text-4xl md:text-5xl font-semibold border-b border-blue-800 dark:border-white pb-12">
+          <h1 className="border-b border-blue-800 pb-12 text-4xl font-semibold md:text-5xl dark:border-white">
             {monthYear()} new online casinos
           </h1>
-          <div className="flex flex-col py-4">
-            <span className="">
-              Author:{" "}
-              <a href="#author" className="font-medium ">
-                {author}
-              </a>
-            </span>
-            <span className="text-sky-600 dark:text-white">{reviewDate}</span>
-          </div>
-          <div className="bg-slate-100 dark:bg-gray-200 dark:text-black rounded-xl mt-3">
+
+          <div className="mt-3 rounded-xl bg-slate-100 dark:bg-gray-200 dark:text-black">
             <div className="card p-4">
-              <div className="heading flex items-center border-b gap-7 pb-4">
-                <button className="w-10 h-7 rounded bg-sky-700 dark:bg-zinc-800"></button>
+              <div className="heading flex items-center gap-7 border-b pb-4">
+                <span className="h-7 w-10 rounded bg-sky-700 dark:bg-zinc-800"></span>
                 <h2 className="text-lg">
                   See the latest <span className="font-bold">New Casinos</span>
                 </h2>
-                <a href="#">
-                  <i className="bi bi-info-circle"></i>
-                </a>
               </div>
-              <p className="font-normal pt-4 pb-2 text-justify md:text-xl md:p-6">
+              <p className="pb-2 pt-4 text-justify font-normal md:p-6 md:text-xl">
                 Showing the latest new online casinos here is a great way to
                 show you what is of course new! The list is always updated
                 showing casinos we recently added to Allfreechips, we also try
@@ -150,19 +158,19 @@ export default async function PageOut({ params }) {
         links={{ links }}
         close={<GrClose className="dark:bg-white" />}
         left={
-          <CgMenuLeft className="text-white dark:text-black mx-2 text-xl" />
+          <CgMenuLeft className="mx-2 text-xl text-white dark:text-black" />
         }
       />
 
-      <section className="flex flex-col mx-4 md:flex-row">
-        <div className="hidden md:w-1/4 md:flex md:flex-col md:">
+      <section className="mx-4 flex flex-col md:flex-row">
+        <div className="md: hidden md:flex md:w-1/4 md:flex-col">
           <div
             className="md:flex md:flex-col"
             style={{ position: "sticky", top: "140px" }}
           >
-            <span className="text-lg font-medium p-4">ON THIS PAGE</span>
-            <hr className="border-sky-700 dark:border-white w-60" />
-            <span className="my-4 px-4 border-l-4 font-medium border-sky-700 dark:border-white">
+            <span className="p-4 text-lg font-medium">ON THIS PAGE</span>
+            <hr className="w-60 border-sky-700 dark:border-white" />
+            <span className="my-4 border-l-4 border-sky-700 px-4 font-medium dark:border-white">
               Our top picks
             </span>
             <div className="my-4 flex flex-col space-y-4">
@@ -174,24 +182,28 @@ export default async function PageOut({ params }) {
             </div>
           </div>
         </div>
-        <div className="lg:w-3/4  text-lg md:text-xl font-medium">
+        <div className="text-lg  font-medium md:text-xl lg:w-3/4">
           <div className="text-lg font-normal">
             <h3
               id="LikeCasinos"
-              className="text-3xl font-semibold my-6 md:text-4xl md:my-10 scroll-mt-40"
+              className="my-6 scroll-mt-40 text-3xl font-semibold md:my-10 md:text-4xl"
             >
               List Of Newest Casinos {monthYear()}
             </h3>
 
-            <CasinoDisplayList data={bdata} />
+            <Bonus3 data={bdata} />
+            <form action={loadMoreCasino} className="text-center">
+              <input type="hidden" name="casinoNumber" value={casinoNum} />
+              <LoadMoreButton text="Show More New Casinos" />
+            </form>
           </div>
           <div>
-            <h1
+            <h3
               id="Review"
-              className="text-3xl font-semibold my-4 scroll-mt-40"
+              className="my-4 scroll-mt-40 text-3xl font-semibold"
             >
               About Playing New Online Casinos
-            </h1>
+            </h3>
             <div className="text-lg font-normal">
               <b>How to choose a new online casino wisely</b>{" "}
               <p>
@@ -244,7 +256,6 @@ export default async function PageOut({ params }) {
             </div>
             <ProsCons data={prosCons} />
             <Faq data={faq} />
-            <Author data={authorData} />
           </div>
         </div>
       </section>

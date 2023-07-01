@@ -1,27 +1,24 @@
-
-import Link from "next/link";
 import { Metadata } from "next";
+import Link from "next/link";
 export async function generateMetadata({ params }): Promise<Metadata> {
-    const Title =
-     "Allfreechips Terms and Conditions";
-    const description =
-    "Allfreechips Terms and Conditions";
-    return {
-      title: Title,
-      description: description,
-    };
-  }
+  const Title = "Allfreechips Terms and Conditions";
+  const description = "Allfreechips Terms and Conditions";
+  return {
+    metadataBase: new URL("https://www.allfreechips.com"),
+    title: Title,
+    description: description,
+  };
+}
 
 export default async function page() {
   return (
-    <div className="md:container mx-auto text-sky-700 dark:text-white">
-   
-      <div className="md:px-24 py-8 text-center mt-2 p-2">
-        <h2 className="text-3xl font-semibold px-8 md:text-6xl md:">
+    <div className="mx-auto text-sky-700 md:container dark:text-white">
+      <div className="mt-2 p-2 py-8 text-center md:px-24">
+        <h1 className="md: px-8 text-3xl font-semibold md:text-6xl">
           Terms and Conditions
-        </h2>
+        </h1>
 
-        <p className = 'text:center' >
+        <p className="text:center">
           <em>Last Updated: May 01, 2022</em>
         </p>
 
@@ -100,14 +97,14 @@ export default async function page() {
 
         <p>
           This website uses cookies. Cookies store information related to
-          visitors&#39; preferences, browser type, and other information in order
-          to optimize their experiences. By using this Site you acknowledge your
-          understanding of and consent to AFC Media LLC&#39;s use of cookies.
-          You may delete cookies already on your computer by consulting the
-          instructions for your file management software. You may also disable
-          future cookies in your browser settings. Please note, however, that
-          disabling cookies may prevent or impair your ability to access and
-          fully make use of certain Services and areas of the Site.
+          visitors&#39; preferences, browser type, and other information in
+          order to optimize their experiences. By using this Site you
+          acknowledge your understanding of and consent to AFC Media LLC&#39;s
+          use of cookies. You may delete cookies already on your computer by
+          consulting the instructions for your file management software. You may
+          also disable future cookies in your browser settings. Please note,
+          however, that disabling cookies may prevent or impair your ability to
+          access and fully make use of certain Services and areas of the Site.
         </p>
 
         <p>
@@ -263,8 +260,8 @@ export default async function page() {
 
         <p>
           We do not knowingly collect personal information or data from visitors
-          under 18 years of age. You may not use this site if you are under the age of 18
-          [eighteen].
+          under 18 years of age. You may not use this site if you are under the
+          age of 18 [eighteen].
         </p>
 
         <p>
@@ -757,12 +754,12 @@ export default async function page() {
           officers, employees, contractors, agents, affiliates, partners,
           suppliers, and licensors, from all related claims, actions, demands,
           disputes, damages, and liabilities, whether past, present, or future.
-          IF YOU ARE A CALIFORNIA RESIDENT, YOU HEREBY WAIVE CALIFORNIA CIVIL CODE SECTION 1542 IN CONNECTION
-          WITH THE FOREGOING, WHICH STATES: &quot;A GENERAL RELEASE DOES NOT
-          EXTEND TO CLAIMS WHICH THE CREDITOR DOES NOT KNOW OR SUSPECT TO EXIST
-          IN HIS OR HER FAVOR AT THE TIME OF EXECUTING THE RELEASE, WHICH IF
-          KNOWN BY HIM OR HER MUST HAVE MATERIALLY AFFECTED HIS OR HER
-          SETTLEMENT WITH THE DEBTOR.&quot;
+          IF YOU ARE A CALIFORNIA RESIDENT, YOU HEREBY WAIVE CALIFORNIA CIVIL
+          CODE SECTION 1542 IN CONNECTION WITH THE FOREGOING, WHICH STATES:
+          &quot;A GENERAL RELEASE DOES NOT EXTEND TO CLAIMS WHICH THE CREDITOR
+          DOES NOT KNOW OR SUSPECT TO EXIST IN HIS OR HER FAVOR AT THE TIME OF
+          EXECUTING THE RELEASE, WHICH IF KNOWN BY HIM OR HER MUST HAVE
+          MATERIALLY AFFECTED HIS OR HER SETTLEMENT WITH THE DEBTOR.&quot;
         </p>
 
         <p>
@@ -789,12 +786,13 @@ export default async function page() {
         </p>
 
         <p>
-          We may modify or update these Terms from time to time at our sole discretion. All updates will be effective from the time
-          and date that they are posted. We recommend checking this page
-          regularly for any updates. Your continued use of the Site and Services
-          signifies your acceptance of the updates that occur. We may send you
-          notice of updates to these Terms, including, but not limited to, by
-          email, posting on the Site, or other reasonable means.
+          We may modify or update these Terms from time to time at our sole
+          discretion. All updates will be effective from the time and date that
+          they are posted. We recommend checking this page regularly for any
+          updates. Your continued use of the Site and Services signifies your
+          acceptance of the updates that occur. We may send you notice of
+          updates to these Terms, including, but not limited to, by email,
+          posting on the Site, or other reasonable means.
         </p>
 
         <p>
@@ -1050,9 +1048,9 @@ export default async function page() {
         <p>
           If you choose to implement clickwrap, you should be sure that your
           method requires visitors to make an affirmative action assenting to
-          the terms and conditions. Best practice is to require visitors to scroll through the entire terms
-          (and privacy policy, if you have one) before they can click the button
-          or box to agre.
+          the terms and conditions. Best practice is to require visitors to
+          scroll through the entire terms (and privacy policy, if you have one)
+          before they can click the button or box to agre.
         </p>
 
         <p>
@@ -1131,7 +1129,9 @@ export default async function page() {
           allow others to collect, personal information or data from visitors
           under 13 years of age and, if so, provides your reasons for doing so.
           Website operators that collect this information are required to comply
-          with the Children&#39;s Online Privacy Protection Act (COPPA), which includes obtaining verifiable parental consent to your collection and use of data pertaining to children.
+          with the Children&#39;s Online Privacy Protection Act (COPPA), which
+          includes obtaining verifiable parental consent to your collection and
+          use of data pertaining to children.
         </p>
 
         <p>
@@ -1259,8 +1259,7 @@ export default async function page() {
           procedure outlined under 17 U.S.C. 512(c) and then designates your
           copyright agent responsible for receiving and investigating such
           notices. This information is necessary to comply with the safe harbor
-          provisions of the Digital Millennium Copyright Act (DMCA)
-          .
+          provisions of the Digital Millennium Copyright Act (DMCA) .
         </p>
 
         <p>
@@ -1398,7 +1397,8 @@ export default async function page() {
         <p>
           The last section includes the website operator&#39;s contact
           information, which is an important requirement that helps visitors
-          report any violations of your terms that they may witness and to contact you for help and other matters.
+          report any violations of your terms that they may witness and to
+          contact you for help and other matters.
         </p>
       </div>
     </div>

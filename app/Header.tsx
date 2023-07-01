@@ -1,10 +1,8 @@
-import HeaderClient from "./HeaderClient";
 import { CgMenuLeft } from "react-icons/cg";
-import { fetchUnreadMessages, fetchUnreadMessagesCount } from "./lib/NotificationFetch";
+import HeaderClient1 from "./HeaderClient1";
 
 function Header() {
-
-  return <HeaderClient mobileIcon={<CgMenuLeft />} />;
-};
+  return <HeaderClient1 mobileIcon={<CgMenuLeft />} />;
+}
 
 export default Header;

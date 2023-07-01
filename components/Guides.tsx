@@ -1,25 +1,43 @@
-import React from "react";
-import Casino from "./Casino";
 import Link from "next/link";
-import { FaMedal } from "react-icons/fa";
-import { GiUsaFlag } from "react-icons/gi";
-import { SiBitcoinsv } from "react-icons/si";
-import { RiGameFill } from "react-icons/ri";
 import { BiNotepad } from "react-icons/bi";
+import {
+  FaBullseye,
+  FaMedal,
+  FaDonate,
+  FaArrowAltCircleUp,
+  FaBriefcase,
+} from "react-icons/fa";
+import { GiUsaFlag } from "react-icons/gi";
+import { RiGameFill } from "react-icons/ri";
+import { SiBitcoinsv } from "react-icons/si";
+import Casino from "./Casino";
 
 const Guides = () => {
   return (
-    <div className="md:px-24 py-8 text-center mt-2 p-2">
-      <h2 className="text-3xl font-semibold px-8 md:text-6xl md:">
+    <div className="mt-2 p-2 py-8 text-center md:px-24">
+      <h1 className="md: px-8 text-3xl font-semibold md:text-6xl">
         Allfreechips Online Gaming Guides
-      </h2>
-      <p className="py-6 font-medium md:text-xl md:my-10">
+      </h1>
+      <p className="py-6 font-medium md:my-10 md:text-xl">
         We are proud to offer detailed guides for online gaming covering most
         topics you hopefully are interested in. We have guides for games, Using
         crypto currency as well as many others.
       </p>
       <div className="grid grid-cols-2 md:grid md:grid-cols-3">
-        <Link href="/best-casinos">
+        <Link href="/casino-match">
+          <Casino
+            icon={<FaBullseye className="text-4xl" />}
+            title={"Casino Match"}
+          />
+        </Link>
+        <Link href="/crypto-currency-casinos">
+          <Casino
+            icon={<FaBriefcase className="text-4xl" />}
+            title={"Crypto Casino Guide"}
+          />
+        </Link>
+
+        <Link href="/best-online-casinos">
           <Casino
             icon={<FaMedal className="text-4xl" />}
             title={"Best Online Casinos"}
@@ -45,7 +63,7 @@ const Guides = () => {
         </Link>
         <Link href="/free-spin-casinos">
           <Casino
-            icon={<FaMedal className="text-4xl" />}
+            icon={<FaDonate className="text-4xl" />}
             title={"Free Spins Casinos"}
           />
         </Link>
@@ -55,11 +73,17 @@ const Guides = () => {
             title={"Casinos by Software"}
           />
         </Link>
+        <Link href="/large-casino-bonuses">
+          <Casino
+            icon={<FaArrowAltCircleUp className="text-4xl" />}
+            title={"Largest Casino Bonuses"}
+          />
+        </Link>
       </div>
-      <h3 className="text-3xl font-semibold px-8 md:text-6xl md:">
+      <h3 className="md: px-8 text-3xl font-semibold md:text-6xl">
         Let us know what guide you would like
       </h3>
-      <p className="py-6 font-medium md:text-xl md:my-10">
+      <p className="py-6 font-medium md:my-10 md:text-xl">
         Feel free to drop us a line and ask for information on any gaming topic.
         Most Online casino questions are easy, but we like to get into
         lesser-known issues that can be helpful.
