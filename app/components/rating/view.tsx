@@ -1,12 +1,10 @@
 "use client";
 
-import React, { useState } from "react";
-import { useEffect, lazy } from "react";
-const factoryRatingModal = () => import('../RatingModal');
-const RatingModal = lazy(factoryRatingModal);
-import SelectRating from "../SelectRating";
-import RatingComponent from "../RatingComponent";
 import { useSession } from "next-auth/react";
+import { lazy, useState } from "react";
+import RatingComponent from "../RatingComponent";
+const factoryRatingModal = () => import("../RatingModal");
+const RatingModal = lazy(factoryRatingModal);
 
 const RatingView = ({ type, parent, myRating, addRating }) => {
   const [rating, setRating] = useState(myRating);
@@ -20,34 +18,34 @@ const RatingView = ({ type, parent, myRating, addRating }) => {
   async function saveRating(rating) {
     if (!userEmail) return;
     setRating(rating);
-    if(userEmail)
-      await addRating(rating, type, parent);
+    if (userEmail) await addRating(rating, type, parent);
   }
 
   return (
     <>
-    {!loading && 
-    <>
-      <div className="flex flex-col items-center py-6 space-y-3">
-        <RatingComponent rating={rating} />
-        {rating == 0 && userEmail && (
-          <button
-            className="bg-sky-700 text-white dark:bg-white dark:text-black px-10 py-3 rounded-lg my-10 flex items-center justify-center"
-            onClick={(e) => setShowRatingModal(true)}
-          >
-            Setting star rating...
-          </button>
-        )}
-        {!userEmail && <>You should sign in for star rating...</>}
-      </div>
-      <RatingModal
-        show={showRatingModal}
-        type={type}
-        parentId={parent}
-        setShow={setShowRatingModal}
-        saveRating={saveRating}
-      />
-    </>}
+      {!loading && (
+        <>
+          <div className="flex flex-col items-center space-y-3 py-6">
+            <RatingComponent rating={rating} />
+            {rating == 0 && userEmail && (
+              <button
+                className="my-10 flex items-center justify-center rounded-lg bg-sky-700 px-10 py-3 text-white dark:bg-white dark:text-black"
+                onClick={(e) => setShowRatingModal(true)}
+              >
+                Setting you star rating...
+              </button>
+            )}
+            {!userEmail && <>Sign In to rate...</>}
+          </div>
+          <RatingModal
+            show={showRatingModal}
+            type={type}
+            parentId={parent}
+            setShow={setShowRatingModal}
+            saveRating={saveRating}
+          />
+        </>
+      )}
     </>
   );
 };

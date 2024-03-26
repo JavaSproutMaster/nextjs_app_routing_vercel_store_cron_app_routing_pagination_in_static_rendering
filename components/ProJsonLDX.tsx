@@ -1,4 +1,3 @@
-import React from "react";
 const ProSchema = (data) => {
   const name = data.name;
   const product = data.product;
@@ -7,9 +6,12 @@ const ProSchema = (data) => {
   if (!data.prosCons) {
     return null;
   }
+
+  const ratingv = data?.rating ?? 5;
+  //(ratingv);
   let counter = 1;
   let pros = "";
-  prosCons.pros.map(function (d) {
+  prosCons.pros?.map(function (d) {
     pros =
       pros +
       `
@@ -22,7 +24,7 @@ const ProSchema = (data) => {
   });
   counter = 1;
   let cons = "";
-  prosCons.cons.map(function (d) {
+  prosCons.cons?.map(function (d) {
     cons =
       cons +
       `
@@ -33,7 +35,10 @@ const ProSchema = (data) => {
     },`;
     counter++;
   });
-
+  if (!pros || !cons) {
+    // if we did not have both return nothing
+    return null;
+  }
   cons = cons.substring(0, cons.length - 1); // remove last comma
   pros = pros.substring(0, pros.length - 1); // remove last comma
 
@@ -45,6 +50,10 @@ const ProSchema = (data) => {
       "review": {
         "@type": "Review",
         "name": "${name}",
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "${ratingv}"
+        },
         "author": {
           "@type": "Person",
           "name": "${author}"

@@ -1,39 +1,36 @@
+import { _avg } from "@/app/lib/Aggregation";
 import Image from "next/legacy/image";
 import Link from "next/link";
+import { BsFillStarFill } from "react-icons/bs";
 import {
   FaArrowCircleRight,
   FaChevronCircleDown,
   FaChevronCircleUp,
   FaCopyright,
-  FaStar,
 } from "react-icons/fa";
+import { VscStarEmpty } from "react-icons/vsc";
 import { BonusItemTermsDisplay } from "./details";
 import { BonusItemTerms } from "./selector";
-import { _avg } from "@/app/lib/Aggregation";
-import { BsFillStarFill } from "react-icons/bs";
-import { VscStarEmpty } from "react-icons/vsc";
+import { PlayCasinoLink } from "../PlayCasinoLink";
 
 export function CasinoDisplayListContent({ data }) {
-  const bonusTerms =
-    "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec volutpat elit vel tellus eleifend imperdiet. Donec consectetur urna sed neque rhoncus dapibus. Aenean nunc erat, lobortis a ex dignissim, scelerisque malesuada odio. Sed vestibulum dictum eleifend.";
-  const ratings = data.map(d => {
+  const bonusTerms: string = ""; // TODO: details
+  const ratings = data.map((d) => {
     return _avg(d.casino_ratings);
-  })
+  });
   return data.map((d, index) => (
     <div
       key={d.id}
-      className="border items-center border-gray-300 p-6 rounded my-4"
+      className="relative my-4 items-center rounded border border-gray-300 p-6"
     >
       <div className="md:flex md:justify-between">
         <div className="flex items-center md:flex-col">
           <Image
-            unoptimized // avoids getting charged
+            unoptimized
             alt={d.casino + " logo"}
             width={100}
             height={80}
-            src={`https://www.allfreechips.com/image/casinoiconscut/${encodeURIComponent(
-              d.button
-            )}`}
+            src={`/image/casinoiconscut/${encodeURIComponent(d.button)}`}
           />
         </div>
         <hr className="border-sky-700 dark:border-white" />
@@ -41,7 +38,7 @@ export function CasinoDisplayListContent({ data }) {
           <p className="">Deposit Bonus</p>
           <div className="flex flex-col">
             <div className="flex items-center">
-              <p className="text-lg font-medium pr-3 md:flex flex-col md:text-4xl">
+              <p className="flex-col pr-3 text-lg font-medium md:flex md:text-4xl">
                 {d.depositPercent}%{" "}
                 <span className="md:text-lg">
                   up to {d.currency}
@@ -51,12 +48,12 @@ export function CasinoDisplayListContent({ data }) {
             </div>
           </div>
         </div>
-        <hr className="md:border md:h-14 border-sky-700 dark:border-white" />
+        <hr className="border-sky-700 md:h-14 md:border dark:border-white" />
         <div className="flex items-center justify-between py-4 md:flex-col">
           <p className="">{d.nodeposit_type} Bonus</p>
           <div className="flex flex-col">
             <div className="flex items-center">
-              <p className="text-lg font-medium pr-3 md:flex flex-col md:text-4xl">
+              <p className="flex-col pr-3 text-lg font-medium md:flex md:text-4xl">
                 {d.ndcurrency}
                 {d.nodeposit}
                 {d.fstext} <span className="md:text-lg">{d.ndCodeDisp}</span>
@@ -66,18 +63,13 @@ export function CasinoDisplayListContent({ data }) {
         </div>
         <hr className="border-sky-700 dark:border-white" />
         <div className="flex flex-col">
-          <Link
-            rel="nofollow"
-            target="_blank"
-            href={`https://allfreechips.com/play_casino${encodeURIComponent(
-              d.id
-            )}.html`}
-            type="button"
-            className="flex rounded bg-sky-700 text-white dark:bg-white dark:text-black py-3 my-4 justify-center items-center font-bold md:px-8"
+          <PlayCasinoLink
+            casinoId={d.clean_name}
+            className="my-4 flex items-center justify-center rounded bg-sky-700 py-3 font-bold text-white md:px-8 dark:bg-white dark:text-black"
           >
             Play Now
             <FaArrowCircleRight className="mx-2" />
-          </Link>
+          </PlayCasinoLink>
           <p className="text-sm font-normal">
             On {d.casino}’s {d.casinoSiteText}
           </p>
@@ -85,42 +77,54 @@ export function CasinoDisplayListContent({ data }) {
       </div>
 
       <div className="md:flex md:justify-between">
-        <div className="flex flex-row md:flex-row md:items-center sm:items-center md:space-x-6 sm:space-x-3">
-          <p className="text-sm font-medium">Approved by experts</p>
-          <div className="flex items-center md:space-x-2 sm:space-x-0">
-              {[1, 2, 3, 4, 5].map((value) => (
-                <div key={value}>
-                    {ratings[index] >= value && (
-                      <BsFillStarFill />
-                    )}
-                    {ratings[index] < value && (
-                      <VscStarEmpty />
-                    )}
-                </div>
-              ))}
-          
+        <div className="flex flex-row sm:items-center sm:space-x-3 md:flex-row md:items-center md:space-x-6">
+          <p className="text-sm font-medium">{d.casino} user&apos;s ratings</p>
+          <div className="flex items-center sm:space-x-0 md:space-x-2">
+            {[1, 2, 3, 4, 5].map((value) => (
+              <div key={value}>
+                {ratings[index] >= value && <BsFillStarFill />}
+                {ratings[index] < value && <VscStarEmpty />}
+              </div>
+            ))}
+
             <p className="pl-3 font-medium">{ratings[index]?.toFixed(2)}</p>
-            <FaCopyright />
           </div>
         </div>
-        <BonusItemTerms
-          selectorId={d.id}
-          open={<FaChevronCircleDown />}
-          close={<FaChevronCircleUp />}
-        />
+        {bonusTerms ? (
+          <BonusItemTerms
+            selectorId={d.id}
+            open={<FaChevronCircleDown />}
+            close={<FaChevronCircleUp />}
+          />
+        ) : null}
         <div className="w-[178px]">
-          <h5 className="text-normal font-medium">
-            <Link href={`/review/${encodeURIComponent(d.clean_name)}`}>
+          <b className="text-normal font-medium">
+            <Link href={`/casinos/${encodeURIComponent(d.clean_name)}`}>
               {d.casinoRevText}
             </Link>
-          </h5>
+          </b>
         </div>
       </div>
-      <BonusItemTermsDisplay selectorId={d.id}>
-        <div className="flex pt-3 text-sm">
-          <h6>{bonusTerms}</h6>
-        </div>
-      </BonusItemTermsDisplay>
+      {bonusTerms ? (
+        <BonusItemTermsDisplay selectorId={d.id}>
+          <div className="absolute left-4 right-4 z-10 inline-block rounded-lg border border-gray-200 bg-white px-3 py-2 text-base font-medium text-current shadow-xl md:left-1/2">
+            {bonusTerms.startsWith("http") ? (
+              <p>
+                <a
+                  rel="noreferrer"
+                  href={bonusTerms}
+                  target="_blank"
+                  className="text-lg font-bold italic underline underline-offset-2 antialiased hover:font-bold hover:not-italic"
+                >
+                  Click here to read on {d.casino}
+                </a>
+              </p>
+            ) : (
+              <p>{bonusTerms}</p>
+            )}
+          </div>
+        </BonusItemTermsDisplay>
+      ) : null}
     </div>
   ));
 }

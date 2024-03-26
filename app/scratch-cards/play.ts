@@ -1,21 +1,21 @@
 "use server";
 import prisma from "@/client";
-import { authOptions } from "@/pages/api/auth/[...nextauth]";
+import { authOptions } from "@/app/api/auth/[...nextauth]/auth";
 import { getServerSession } from "next-auth/next";
 import crypto from "node:crypto";
 import {
-  activePrizeChipStyle as prizeChips,
   isReadyForPlay,
+  activePrizeChipStyle as prizeChips,
   shuffle,
 } from "./shared";
 
 export async function playScratch(formData: FormData) {
   const session = await getServerSession(authOptions);
-  //@ts-expect-error
-  const userEmail: string = session?.user?.email;
-  // const userEmail: string = "kennystwork@gmail.com";
-  // //@ts-expect-error
-  //  const user: any = session?.user;
+  let userEmail = session?.user?.email;
+  if (userEmail == undefined) {
+    userEmail = null; //  stop prisma from returning a val on undefined
+  }
+
   const user = await prisma.user.findFirst({
     where: {
       email: userEmail,
@@ -50,27 +50,56 @@ export async function playScratch(formData: FormData) {
     prizeChips.VALUE_25_USD,
     prizeChips.VALUE_25_USD,
   ]);
+  const odds = await prisma.site_setting.findFirst({
+    where: {
+      name: "scratch_odds",
+    },
+  });
+
+  const use_odds = Number(odds?.value) ?? 1200;
 
   let prize: string | null = null;
-  const chance = crypto.randomInt(1000);
+  const chance = crypto.randomInt(use_odds);
   switch (chance) {
     case 100: {
       // $25 USD reward
       prize = canWinCash ? prizeChips.VALUE_25_USD : prizeChips.VALUE_25_PTS;
       break;
     }
+    case 700:
+    case 710:
+    case 79:
+    case 72:
     case 200:
     case 210:
+    case 50:
+    case 78:
     case 220: {
       // 25 AFC reward points
       prize = prizeChips.VALUE_25_PTS;
       break;
     }
+    case 301:
+    case 311:
+    case 312:
+    case 322:
+    case 322:
+    case 332:
+    case 332:
+    case 342:
+    case 342:
+    case 352:
+    case 362:
+    case 372:
     case 300:
     case 310:
+    case 315:
+    case 325:
     case 320:
     case 330:
+    case 335:
     case 340:
+    case 345:
     case 350:
     case 360:
     case 370: {
@@ -78,11 +107,24 @@ export async function playScratch(formData: FormData) {
       prize = prizeChips.VALUE_15_PTS;
       break;
     }
+    case 500:
+    case 510:
+    case 515:
+    case 518:
+    case 525:
+    case 520:
+    case 530:
+    case 540:
+    case 545:
     case 400:
     case 410:
+    case 415:
+    case 418:
+    case 425:
     case 420:
     case 430:
     case 440:
+    case 445:
     case 450:
     case 460:
     case 470: {
@@ -126,7 +168,7 @@ export async function playScratch(formData: FormData) {
         chipset: prizeSet,
         freePlay: isFreePlay,
         ScratchCardAward:
-          prize === prizeChips.VALUE_25_USD
+          prize === prizeChips.VALUE_25_USD && user.role !== 2
             ? {
                 create: {
                   awarded: false,

@@ -3,6 +3,7 @@
 import { signIn, signOut, useSession } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
+import { usePathname, useRouter } from "next/navigation";
 import { lazy, useEffect, useRef, useState } from "react";
 import { useIsMounted } from "../hooks/is-mounted";
 
@@ -12,11 +13,12 @@ const SearchResult = lazy(factorySearchResult);
 const factoryFullModal = () => import("./components/FullModal");
 const FullModal = lazy(factoryFullModal);
 
-const factoryNotificationDetailModal = () => import("./components/Notification/NotificationDetailModal");
-const NotificationDetailModal = lazy(factoryNotificationDetailModal)
-import { usePathname, useRouter } from "next/navigation";
+const factoryNotificationDetailModal = () =>
+  import("./components/Notification/NotificationDetailModal");
+const NotificationDetailModal = lazy(factoryNotificationDetailModal);
 
-const factoryNotificationArea = () => import("./components/Notification/NotificationArea");
+const factoryNotificationArea = () =>
+  import("./components/Notification/NotificationArea");
 const NotificationArea = lazy(factoryNotificationArea);
 const HeaderClient = ({ mobileIcon }) => {
   // get logined user personal information
@@ -25,12 +27,12 @@ const HeaderClient = ({ mobileIcon }) => {
   const wrapperRef = useRef(null);
   const notiRef = useRef(null);
   const [showAvatar, setShowAvatar] = useState(false);
-  const [showNoti, setShowNoti] = useState(false);
-  // show message modal
-  const [showNotificationModal, setShowNotificationModal] = useState(false);
+  // const [showNoti, setShowNoti] = useState(false);
+  // // show message modal
+  // const [showNotificationModal, setShowNotificationModal] = useState(false);
 
-  const [message, setMessage] = useState<any>();
-  const [mcount, setMCount] = useState(0);
+  // const [message, setMessage] = useState<any>();
+  // const [mcount, setMCount] = useState(0);
   // show Search Modal state
   const [open, setOpen] = useState(false);
   // get User information.
@@ -42,7 +44,7 @@ const HeaderClient = ({ mobileIcon }) => {
   const [key, setKey] = useState("");
   // search start
   const [showSearchModal, setShowSearchModal] = useState(false);
-  
+
   // hide / show header when scrolling up and down
   const [isScrolled, setIsScrolled] = useState(true);
   // estimate scroll pos
@@ -74,7 +76,7 @@ const HeaderClient = ({ mobileIcon }) => {
   }
   // add event when click outside
   useOutsideComponent(wrapperRef, setShowAvatar);
-  useOutsideComponent(notiRef, setShowNoti);
+  // useOutsideComponent(notiRef, setShowNoti);
   // hide/ show headbar
   useEffect(() => {
     const handleScroll = () => {
@@ -103,28 +105,7 @@ const HeaderClient = ({ mobileIcon }) => {
       status === "authenticated" &&
       (session?.user?.name?.length ?? 0) < 1
     )
-    router.push("/myprofile");
-    
-    // fetch unread messages count
-    async function fetchUnreadMessage() {
-      // const unreadCount = await fetchUnreadMessagesCount(session?.user?.email);
-      const response = await fetch("/notification/count", {
-        method: "post",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          email: session?.user?.email
-        }),
-      });
-
-      const unreadCount = await response.json();
-      
-      setMCount(unreadCount?.count);
-    }
-    if(session?.user?.email)
-      fetchUnreadMessage();
+      router.push("/myprofile");
   }, [path, router, session, status]);
 
   const changeVal = (e) => {
@@ -139,123 +120,105 @@ const HeaderClient = ({ mobileIcon }) => {
     }
   };
 
-  const showNotificationArea = async () => {
-    const response = await fetch("/notification/messages", {
-      method: "post",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        email: session?.user?.email
-      }),
-    });
-
-    const result = await response.json();
-
-    setMessages(result?.messages);
-    setShowNoti(true);
-  }
-
-  const setNotificationDetail = (m) => {
-    debugger;
-    setMCount(mcount - 1);
-    setMessage(m);
-    setShowNotificationModal(true);
-  }
-
   const headerClassName = `flex w-full top-0 left-0 justify-between px-12 lg:px-32 py-6 z-20 bg-white text-sky-700 dark:bg-zinc-800 dark:text-white border-b-2 ${
     isScrolled ? "sticky top-0" : ""
   }`;
 
   return (
     <div className={headerClassName}>
-      <div className="lg:min-w-fit flex items-center justify-between py-2 lg:px-10 px-7">
+      <div className="flex items-center justify-between px-7 py-2 lg:min-w-fit lg:px-10">
         <div
           onClick={() => setOpen(!open)}
-          className="text-4xl absolute left-4 lg:hidden"
+          className="absolute left-4 text-4xl lg:hidden"
         >
           {mobileIcon}
         </div>
-        <div className="font-medium text-3xl cursor-pointer flex items-center">
+        <div className="flex cursor-pointer items-center text-3xl font-medium">
           <Link href="/">
             <Image
+              unoptimized
               priority
               alt={"Allfreechips Casino Guide"}
               width={250}
               height={57}
-              src={`https://afc-redux.vercel.app/logo.png`}
+              src={`/images/logo.png`}
             />
           </Link>
         </div>
       </div>
       <ul
-        className={`lg:grow lg:flex lg:items-center lg:pb-0 pb-12 bg-white dark:bg-zinc-800 absolute lg:static lg:z-auto z-[-1] left-0 w-full lg:w-auto lg:pl-0 pl-9 transition-all duration-100 lg:transition-none ease-in ${
+        className={`absolute left-0 z-[-1] w-full bg-white pb-12 pl-9 transition-all duration-100 ease-in lg:static lg:z-auto lg:flex lg:w-auto lg:grow lg:items-center lg:pb-0 lg:pl-0 lg:transition-none dark:bg-zinc-800 ${
           open ? "top-20" : "top-[-490px]"
         }`}
       >
         {open && (
-          <li className="lg:ml-8 text-xl lg:my-0 my-7 w-2/5">
+          <li className="my-7 w-2/5 text-xl lg:my-0 lg:ml-8">
             <div className="relative text-current lg:hidden">
               <form action={search}>
                 <input
                   type="search"
                   name="serch"
+                  id="search"
                   value={searchKey}
                   onChange={(e) => changeVal(e)}
                   placeholder="Search"
-                  className="bg-gray h-10 sm:w-40 md:w-48 px-5 pr-10 border-2 border-gray-500 hover:border-current rounded-full text-md focus:outline-none"
+                  className="bg-gray text-md h-10 rounded-full border-2 border-gray-500 px-5 pr-10 hover:border-current focus:outline-none sm:w-40 md:w-48"
                 />
               </form>
             </div>
           </li>
         )}
-        <li className="lg:ml-8 text-xl lg:my-0 my-7">
+        <li className="my-7 text-xl lg:my-0 lg:ml-8">
           <Link
-            href="/review"
-            className="font-medium hover:text-gray-400 duration-500"
+            href="/casinos"
+            className="font-medium duration-500 hover:text-gray-400"
           >
             Casino Reviews
           </Link>
         </li>
-        <li className="lg:ml-8 text-xl lg:my-0 my-7">
+        <li className="my-7 text-xl lg:my-0 lg:ml-8">
           <Link
             href="/casino-bonuses"
-            className="font-medium hover:text-gray-400 duration-500"
+            className="font-medium duration-500 hover:text-gray-400"
           >
             Casino Bonuses
           </Link>
         </li>
-        <li className="lg:ml-8 text-xl lg:my-0 my-7">
+        <li className="my-7 text-xl lg:my-0 lg:ml-8">
           <Link
             href="/software"
-            className="font-medium hover:text-gray-400 duration-500"
+            className="font-medium duration-500 hover:text-gray-400"
           >
             Casino Softwares
           </Link>
         </li>
-        <li className="lg:ml-8 text-xl lg:my-0 my-7">
+        <li className="my-7 text-xl lg:my-0 lg:ml-8">
           <Link
             href="/guides"
-            className="font-medium hover:text-gray-400 duration-500"
+            className="font-medium duration-500 hover:text-gray-400"
           >
             Guides
           </Link>
         </li>
       </ul>
-      <div className="md:basis-1/4 flex items-center justify-end space-x-4 ml-2 mt-2">
-        <div className="relative text-current hidden lg:block">
+      <div className="ml-2 mt-2 flex items-center justify-end space-x-4 md:basis-1/4">
+        <div className="relative hidden text-current lg:block">
           <form action={search}>
             <input
               type="search"
               name="serch"
+              id="search"
               value={searchKey}
               onChange={(e) => changeVal(e)}
               placeholder="Search"
-              className="bg-gray h-10 sm:w-40 md:w-48 px-5 pr-10 border-2 border-gray-500 hover:border-current rounded-full text-md focus:outline-none"
+              className="bg-gray text-md h-10 rounded-full border-2 border-gray-500 px-5 pr-10 hover:border-current focus:outline-none sm:w-40 md:w-48"
             />
 
-            <button type="submit" className="absolute right-0 top-0 mt-3 mr-4">
+            <button
+              type="submit"
+              aria-label="Search"
+              className="absolute right-0 top-0 mr-4 mt-3"
+            >
               <svg
                 className="h-4 w-4 fill-current"
                 xmlns="http://www.w3.org/2000/svg"
@@ -274,7 +237,6 @@ const HeaderClient = ({ mobileIcon }) => {
               </svg>
             </button>
           </form>
-          
         </div>
         <div
           className={`${
@@ -285,47 +247,68 @@ const HeaderClient = ({ mobileIcon }) => {
             <div className="relative">
               {isMounted && session && session.user ? (
                 <div className="flex items-center gap-4">
-                  <div>
-                    <button 
-                      type="button" 
-                      className="relative dark:text-white/80" 
-                      onClick={(e) => 
-                      {
+                  {/* <div>
+                    <button
+                      type="button"
+                      className="relative dark:text-white/80"
+                      onClick={(e) => {
                         e.preventDefault();
                         showNotificationArea();
-                      }}>
-                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-6 h-6">
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M14.857 17.082a23.848 23.848 0 005.454-1.31A8.967 8.967 0 0118 9.75v-.7V9A6 6 0 006 9v.75a8.967 8.967 0 01-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 01-5.714 0m5.714 0a3 3 0 11-5.714 0" />
+                      }}
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        strokeWidth="1.5"
+                        stroke="currentColor"
+                        className="w-6 h-6"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M14.857 17.082a23.848 23.848 0 005.454-1.31A8.967 8.967 0 0118 9.75v-.7V9A6 6 0 006 9v.75a8.967 8.967 0 01-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 01-5.714 0m5.714 0a3 3 0 11-5.714 0"
+                        />
                       </svg>
-                      {mcount > 0 && <span className="absolute -top-px ml-4 mb-3 flex h-2 w-2">
-                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-rose-400 opacity-75"></span>
-                        <span className="relative inline-flex rounded-full h-2 w-2 bg-rose-600"></span>
-                      </span>}
-                      
+                      {mcount > 0 && (
+                        <span className="absolute -top-px ml-4 mb-3 flex h-2 w-2">
+                          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-rose-400 opacity-75"></span>
+                          <span className="relative inline-flex rounded-full h-2 w-2 bg-rose-600"></span>
+                        </span>
+                      )}
                     </button>
-                    {showNoti && <div ref={notiRef}>
-                            <NotificationArea showArea={setShowNoti} totalCount={mcount} messages={unreadMessages} showModal={setNotificationDetail}/>
-                        </div>}
-                  </div>
+                    {showNoti && (
+                      <div ref={notiRef}>
+                        <NotificationArea
+                          showArea={setShowNoti}
+                          totalCount={mcount}
+                          messages={unreadMessages}
+                          showModal={setNotificationDetail}
+                        />
+                      </div>
+                    )}
+                  </div> */}
                   <div
                     onClick={() => setShowAvatar(true)}
-                    className="cursor-pointer flex text-sm border-2 border-transparent rounded focus:outline-none focus:border-white transition duration-150 ease-in-out items-center"
+                    className="flex cursor-pointer items-center rounded border-2 border-transparent text-sm transition duration-150 ease-in-out focus:border-white focus:outline-none"
                   >
                     {session?.user?.image && session?.user?.image.length > 0 ? (
-                      // eslint-disable-next-line @next/next/no-img-element
-                      <img
-                        src={session?.user?.image}
-                        className="rounded w-8 h-8"
+                      <Image
+                        unoptimized
+                        src={userImage(session.user.image)}
+                        className="h-8 w-8 rounded"
                         alt={session?.user?.name || "Unknown User"}
+                        width={"8"}
+                        height={"8"}
                       />
                     ) : (
-                      <span className="rounded-full bg-yellow-500 text-white w-10 h-10 flex items-center justify-center">
+                      <span className="flex h-10 w-10 items-center justify-center rounded-full bg-yellow-500 text-white">
                         {session?.user?.name}
                       </span>
                     )}
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
-                      className="ml-2 text-current dark:text-gray-200 icon icon-tabler icon-tabler-chevron-down"
+                      className="icon icon-tabler icon-tabler-chevron-down ml-2 text-current dark:text-gray-200"
                       width="20"
                       height="20"
                       viewBox="0 0 24 24"
@@ -340,38 +323,38 @@ const HeaderClient = ({ mobileIcon }) => {
                     </svg>
                   </div>
                 </div>
-               ) : ( 
+              ) : (
                 <span
-                  className="font-medium hover:text-gray-400 hover:cursor-pointer"
+                  className="font-medium hover:cursor-pointer hover:text-gray-400"
                   onClick={() => signIn()}
                 >
                   Sign&nbsp;In
                 </span>
-              )} 
-                            
+              )}
+
               {showAvatar && (
                 <div ref={wrapperRef}>
-                  <div className="bg-white dark:bg-gray-900 border border-white dark:border-gray-800 rounded absolute top-0 right-0 mt-12 shadow z-50 fadeIn">
-                    <p className="text-current dark:text-gray-300 text-sm pb-3 pt-3 px-5 border border-t-0 border-l-0 border-r-0 border-gray-200 dark:border-gray-700 ">
+                  <div className="fadeIn absolute right-0 top-0 z-50 mt-12 rounded border border-white bg-white shadow dark:border-gray-800 dark:bg-gray-900">
+                    <p className="border border-l-0 border-r-0 border-t-0 border-gray-200 px-5 pb-3 pt-3 text-sm text-current dark:border-gray-700 dark:text-orange-300 ">
                       {session?.user?.email}
                     </p>
                     {session?.user && session?.user?.name && (
                       <a
-                        className="block text-current dark:text-gray-400 text-sm pb-3 pt-3 px-5 hover:bg-gray-200 dark:hover:bg-gray-700"
+                        className="block px-5 pb-3 pt-3 text-sm text-current hover:bg-gray-200 dark:text-gray-400 dark:hover:bg-gray-700"
                         href="#"
                       >
                         {session.user?.name}
                       </a>
                     )}
                     <a
-                      className="block text-current dark:text-gray-400 text-sm pb-3 pt-3 px-5 hover:bg-gray-200 dark:hover:bg-gray-700"
+                      className="block px-5 pb-3 pt-3 text-sm text-current hover:bg-gray-200 dark:text-gray-400 dark:hover:bg-gray-700"
                       href="/myprofile"
                     >
                       Account Settings
                     </a>
 
                     <p
-                      className="block text-current dark:text-gray-400 text-sm pb-3 pt-3 px-5 hover:bg-gray-200 dark:hover:bg-gray-700 cursor-pointer"
+                      className="block cursor-pointer px-5 pb-3 pt-3 text-sm text-current hover:bg-gray-200 dark:text-gray-400 dark:hover:bg-gray-700"
                       onClick={() => signOut()}
                     >
                       Sign Out
@@ -381,27 +364,26 @@ const HeaderClient = ({ mobileIcon }) => {
               )}
             </div>
           </div>
-          
         </div>
-
       </div>
-      {showSearchModal && (
-        <FullModal
-          setShow={setShowSearchModal}
-          search={search}
-          searchKey={searchKey}
-          changeVal={changeVal}
-        >
-          <SearchResult searchkey={key} />
-        </FullModal>
-      )}
 
-      {showNotificationModal && 
-        <NotificationDetailModal item={message} show={showNotificationModal} setShow={setShowNotificationModal} />
-      }
-
+      {/* {showNotificationModal && (
+        <NotificationDetailModal
+          item={message}
+          show={showNotificationModal}
+          setShow={setShowNotificationModal}
+        />
+      )} */}
     </div>
   );
 };
+function userImage(image) {
+  let img = image ?? "/images/emptyuser.png";
+  if (img.indexOf("http") == 0) {
+    return img;
+  }
+  img = "/image/users/" + img; // if we store in blob then we use the image/users route
 
+  return img;
+}
 export default HeaderClient;

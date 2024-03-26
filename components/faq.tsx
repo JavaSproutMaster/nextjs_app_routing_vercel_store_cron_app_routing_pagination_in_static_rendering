@@ -1,20 +1,15 @@
 import React from "react";
-import Collapse from "./Collapse";
 import { FaAngleDown } from "react-icons/fa";
+import Collapse from "./Collapse";
 const Faq = (props: any) => {
-
- 
-  if (!props?.data[0]?.question?.length) {
-    
-  }
-  const faq = props.data
+  const faq = props.data;
   return (
     <div id="faq" className="scroll-mt-40">
-      <h5 className="text-3xl font-semibold my-6 md:text-4xl md:my-10">
+      <b className="text-3xl font-semibold my-6 md:text-4xl md:my-10">
         Frequently asked questions
-      </h5>
+      </b>
 
-      {faq.map(function (d, id) {
+      {faq?.map(function (d, id) {
         const data = { d, id };
         return (
           <React.Fragment key={id}>

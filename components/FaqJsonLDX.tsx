@@ -1,8 +1,8 @@
-import React from "react";
 const FaqJsonLD = (data) => {
   if (!data.data) {
     return null;
   }
+  let check = 0;
   let faqOut =
     '{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[';
 
@@ -13,8 +13,14 @@ const FaqJsonLD = (data) => {
       '","acceptedAnswer":{"@type":"Answer","text":"' +
       d.answer +
       '"}},';
+    if (d.answer) {
+      check = 1;
+    }
     faqOut = faqOut + faqQ;
   });
+  if (!check) {
+    return null;
+  }
   faqOut = faqOut.substring(0, faqOut.length - 1); // remove last comma
   faqOut = faqOut + "]}'};";
   // console.log (faqOut);

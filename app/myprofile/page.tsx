@@ -1,31 +1,28 @@
-import Guides from "@/components/Guides";
-import Link from "next/link";
-import { Metadata } from "next";
-import monthYear from "@/components/functions/monthYear";
-import Profile from "../components/Profile";
-import Image from "next/image";
-import { addUsername, getLoginUser, updateUser } from "../lib/UserFetch";
-import { getServerSession } from "next-auth";
-import { authOptions } from "@/pages/api/auth/[...nextauth]";
 import prisma from "@/client";
+import monthYear from "@/components/functions/monthYear";
+import { authOptions } from "@/app/api/auth/[...nextauth]/auth";
+import { Metadata } from "next";
+import { getServerSession } from "next-auth";
 import { revalidatePath } from "next/cache";
+import Profile from "../components/Profile";
+import { addUsername, updateUser } from "../lib/UserFetch";
 export async function generateMetadata({ params }): Promise<Metadata> {
-  const Title =
-    monthYear() + " Current online gambling guide list";
+  const Title = monthYear() + " Current online gambling guide list";
   const description =
     "Online casino guides with detailed information on slots, games and bonus types along with how to instructions.";
   return {
+    metadataBase: new URL("https://www.allfreechips.com"),
     title: Title,
     description: description,
   };
 }
 
-
 export default async function Page() {
-    
   const session = await getServerSession(authOptions);
-  //@ts-expect-error
-  const userEmail: string = session?.user?.email;
+  let userEmail = session?.user?.email;
+  if (userEmail == undefined) {
+    userEmail = "never@addUsername.no"; //  stop prisma from returning a val on undefined
+  }
 
   let user = await prisma.user.findFirst({
     select: {
@@ -33,23 +30,21 @@ export default async function Page() {
       name: true,
       email: true,
       image: true,
-      afcRewards: true, 
+      afcRewards: true,
     },
-    where:{
-        email: userEmail
-    }
+    where: {
+      email: userEmail,
+    },
   });
 
   if (!userEmail) {
     user = null;
   }
 
-  if(user && user.email && (!user.name || user.name === '')){
+  if (user && user.email && (!user.name || user.name === "")) {
     const name = await updateUser();
-    if (name && name.length > 0) revalidatePath('/myprofile');
+    if (name && name.length > 0) revalidatePath("/myprofile");
   }
 
-  return (
-        <Profile user={user} addUsername={addUsername}/>
-    );
+  return <Profile user={user} addUsername={addUsername} />;
 }

@@ -1,22 +1,25 @@
-import Link from "next/link";
-import { CgMenuLeft } from "react-icons/cg";
-import { GrClose } from "react-icons/gr";
+import prisma from "@/client";
 import Author from "@/components/AboutAuthor";
+
+import Bonus3 from "@/components/Bonus3";
+import FaqJsonLD from "@/components/FaqJsonLDX";
+import ProSchema from "@/components/ProJsonLDX";
+import ProsCons from "@/components/ProsCons";
 import Faq from "@/components/faq";
 import BonusFilter from "@/components/functions/bonusfilter";
 import monthYear from "@/components/functions/monthYear";
-import ProsCons from "@/components/ProsCons";
-import FaqJsonLD from "@/components/FaqJsonLDX";
-import CasinoDisplayList from "@/components/CasinoDisplayList";
-import prisma from "@/client";
-import MobileJump from "../components/MobileJump";
 import { Metadata } from "next";
-import ProSchema from "@/components/ProJsonLDX";
+import Link from "next/link";
+import { CgMenuLeft } from "react-icons/cg";
+import { GrClose } from "react-icons/gr";
+import MobileJump from "../components/MobileJump";
 async function getProps({ params }) {
   const data = await prisma.casino_p_casinos.findMany({
     where: {
       approved: 1,
-      rogue: 0,
+      vercel_image_url: { not: null },
+      vercel_casino_button: { not: null },
+      rogue: { not: 1 },
       OR: [{ hot: 1 }, { new: 1 }],
 
       // bonuses: { some: {  multi_currency: { contains:  '4' }, } },  // BTC IS #4
@@ -51,12 +54,15 @@ export const dynamic = "force-static";
 
 export async function generateMetadata({ params }): Promise<Metadata> {
   const Title =
-    "New Online Casinos : " + monthYear() + " New Casinos on Allfreechips";
-  const Description =
-    "See the latest online casinos here as we add every new casino in order, new " +
+    "Best Online Casinos : The best online casinos for " +
     monthYear() +
-    " online casinos";
+    " at Allfreechips";
+  const Description =
+    "The latest list of the best " +
+    monthYear() +
+    " online casinos and casino bonuses on Allfreechips.";
   return {
+    metadataBase: new URL("https://www.allfreechips.com"),
     title: Title,
     description: Description,
   };
@@ -64,10 +70,10 @@ export async function generateMetadata({ params }): Promise<Metadata> {
 
 export default async function PageOut({ params }) {
   const links = [
-    { link: "#LikeCasinos", text: `New Casinos` },
-    { link: "#ProsCons", text: `New Casino Pros and Cons` },
-    { link: "#Review", text: `About New Casinos` },
-    { link: "#faq", text: `New Casino FAQs` },
+    { link: "#LikeCasinos", text: `Best Current Casinos` },
+    { link: "#ProsCons", text: `Best Casino Pros and Cons` },
+    { link: "#Review", text: `About the best casinos` },
+    { link: "#faq", text: `Best casino FAQs` },
   ];
   const props = await getProps({ params });
   const author = "AFC Chris";
@@ -76,53 +82,56 @@ export default async function PageOut({ params }) {
     "Chris Started working on Allfreechips in July of 2004, After many frustrating years of learning how to make a webpage we now have the current site!  Chris started by being a player first, and loved online gaming so much he created the Allfreechips Community.";
   const authorData = { author, authorText };
   const bdata = props.bonus;
+
   const prosCons = {
     pros: [
       {
-        title: "How do you decide these are the best casinos for " + monthYear,
+        title: "Better than good",
         content:
-          "We look at a lot of variables including software used, user feedback and overall quality of each casino.",
+          "Seriously the very best casino voted mainly by the ALlfreechips users, real players letting you know what are the very best casino online today.",
       },
       {
-        title: "New games",
+        title: "Best bonuses",
         content:
-          "You may notice older casinos stick with one or two gaming providers; most new online casinos offer a large suite of casino software operators.",
+          "We think the users of the Allfreechips casino site are smart enough to both what they think are the very best online casinos and casino bonuses.",
       },
     ],
     cons: [
       {
-        title: "Fresh Start",
+        title: "None",
         content:
-          "As with most things in life sometime a fresh start makes all the difference! It's always good to keep an eye on what new options you may have out there when looking for the best new casinos.",
+          "These are the very best of the best casinos so I can't think of a con!",
       },
     ],
   };
 
   const faq = [
     {
-      question: "Are new online casinos safe?",
+      question:
+        "How do you decide these are the best casinos for the Allfreechips site?",
       answer:
-        "We review casinos added to Allfreechips and only allow brands we feel are legitimate gaming casinos. If we find any issue with playing, banking or hearing from users we move quick to ensure issues are resolved or they are moved to the rogue section, something we have not had to do in quite some time.",
+        "We look at a lot of variables including software used, user feedback and overall quality of each casino.",
     },
     {
-      question: "Do I get new promos at a new casino?",
+      question:
+        "Can I cast my vote for what I think is the best online casino as well?",
       answer:
-        "Of course you do, that is the number one draw for players to try new casinos. Sign up and take advantage of whatever the casino if offering for your business.",
+        "Yes of course and that is what we love about the Allfreechips casino community.  Once you have you log on to Allfreechips you can cast your rankings and leave detailed comments to assist other gamers.",
     },
   ];
 
   return (
-    <div className="md:container mx-auto text-sky-700 dark:text-white">
+    <div className="mx-auto text-sky-700 md:container dark:text-white">
       <FaqJsonLD data={faq} />
       <ProSchema
         prosCons={prosCons}
-        name="New Casinos"
-        product="New Casino List"
+        name="Best Casinos"
+        product="BestCasino List"
       />
-      <section className="py-8  px-6">
+      <section className="px-6  py-8">
         <div className="container mx-auto">
-          <h1 className="text-4xl md:text-5xl font-semibold border-b border-blue-800 dark:border-white pb-12">
-            {monthYear()} new online casinos
+          <h1 className="border-b border-blue-800 pb-12 text-4xl font-semibold md:text-5xl dark:border-white">
+            {monthYear()} best ranked online casinos
           </h1>
           <div className="flex flex-col py-4">
             <span className="">
@@ -133,23 +142,26 @@ export default async function PageOut({ params }) {
             </span>
             <span className="text-sky-600 dark:text-white">{reviewDate}</span>
           </div>
-          <div className="bg-slate-100 dark:bg-gray-200 dark:text-black rounded-xl mt-3">
+          <div className="mt-3 rounded-xl bg-slate-100 dark:bg-gray-200 dark:text-black">
             <div className="card p-4">
-              <div className="heading flex items-center border-b gap-7 pb-4">
-                <button className="w-10 h-7 rounded bg-sky-700 dark:bg-zinc-800"></button>
+              <div className="heading flex items-center gap-7 border-b pb-4">
+                <span className="h-7 w-10 rounded bg-sky-700 dark:bg-zinc-800"></span>
                 <h2 className="text-lg">
-                  See the latest <span className="font-bold">New Casinos</span>
+                  See the latest{" "}
+                  <span className="font-bold">best Casino list</span>
                 </h2>
-                <a href="#">
-                  <i className="bi bi-info-circle"></i>
-                </a>
+
+                <i className="bi bi-info-circle"></i>
               </div>
-              <p className="font-normal pt-4 pb-2 text-justify md:text-xl md:p-6">
-                Showing the latest new online casinos here is a great way to
-                show you what is of course new! The list is always updated
-                showing casinos we recently added to Allfreechips, we also try
-                to only show you casinos that you can play based on your
-                location.
+              <p className="pb-2 pt-4 text-justify font-normal md:p-6 md:text-xl">
+                We take great pride in presenting what we think is the very best
+                in online casinos. We geo target the major pages to filter
+                casino you can not play at making your search for the best
+                casino eve easier. A lot goes into managing a large catalog of
+                online casinos like we have here at Allfreechips so we rely a
+                lot on our users. Votes and comment from you, the real people
+                that play online casinos is our best way to decide what is of
+                course the very best.
               </p>
             </div>
           </div>
@@ -159,19 +171,19 @@ export default async function PageOut({ params }) {
         links={{ links }}
         close={<GrClose className="dark:bg-white" />}
         left={
-          <CgMenuLeft className="text-white dark:text-black mx-2 text-xl" />
+          <CgMenuLeft className="mx-2 text-xl text-white dark:text-black" />
         }
       />
 
-      <section className="flex flex-col mx-4 md:flex-row">
-        <div className="hidden md:w-1/4 md:flex md:flex-col md:">
+      <section className="mx-4 flex flex-col md:flex-row">
+        <div className="md: hidden md:flex md:w-1/4 md:flex-col">
           <div
             className="md:flex md:flex-col"
             style={{ position: "sticky", top: "140px" }}
           >
-            <span className="text-lg font-medium p-4">ON THIS PAGE</span>
-            <hr className="border-sky-700 dark:border-white w-60" />
-            <span className="my-4 px-4 border-l-4 font-medium border-sky-700 dark:border-white">
+            <span className="p-4 text-lg font-medium">ON THIS PAGE</span>
+            <hr className="w-60 border-sky-700 dark:border-white" />
+            <span className="my-4 border-l-4 border-sky-700 px-4 font-medium dark:border-white">
               Our top picks
             </span>
             <div className="my-4 flex flex-col space-y-4">
@@ -183,72 +195,56 @@ export default async function PageOut({ params }) {
             </div>
           </div>
         </div>
-        <div className="lg:w-3/4  text-lg md:text-xl font-medium">
+        <div className="text-lg  font-medium md:text-xl lg:w-3/4">
           <div className="text-lg font-normal">
             <h3
               id="LikeCasinos"
-              className="text-3xl font-semibold my-6 md:text-4xl md:my-10 scroll-mt-40"
+              className="my-6 scroll-mt-40 text-3xl font-semibold md:my-10 md:text-4xl"
             >
-              List Of Newest Casinos {monthYear()}
+              List Of The {monthYear()} Best Casinos
             </h3>
 
-            <CasinoDisplayList data={bdata} />
+            <Bonus3 data={bdata} />
           </div>
           <div>
-            <h1
+            <h4
               id="Review"
-              className="text-3xl font-semibold my-4 scroll-mt-40"
+              className="my-4 scroll-mt-40 text-3xl font-semibold"
             >
-              About Playing New Online Casinos
-            </h1>
+              About Experiencing the best online casinos
+            </h4>
             <div className="text-lg font-normal">
-              <b>How to choose a new online casino wisely</b>{" "}
+              <b>How to choose the best casino wisely</b>{" "}
               <p>
-                Keep your eyes open and never miss numerous opportunities
-                offered by the casinos that have just been launched. Taking into
-                account that this is a very competitive industry, you will never
-                get bored. Your choices are incredibly vast, and they will only
-                keep growing. You will always find new slot sites or casino
-                games to try your luck. In order to stand out and become
-                popular, new casino sites create various interesting promotional
-                campaigns to attract players. Sign up bonuses, or grand opening
-                contests can get them a lot of loyal players. At
-                Allfreechips.com, we are constantly looking out for new casinos
-                offering great bonuses because it’s important for us to provide
-                you with as much information as possible. Be sure that with our
-                service, you will always be the first one to know about them.
+                I think the main goal we all need to be aware of when choosing
+                the best casino is making sure the casino is both safe and fair.
+                Over the passage of humanity there are people trying to take
+                from you whatever they can, there is no place for these people
+                in online gaming and we try hard to remove any bad players.
+                Beyond that its al about having fun when gambling online,
+                leaving your gaming session with a smile on your face knowing
+                this is the right casino for you. Weather its the games offered
+                or the great customer support, most players seem to agree on
+                what makes a casino the best casino.
               </p>
               <p>
-                However, being aware of all the opportunities is not enough for
-                spotting a trustworthy casino. Make sure that a casino provides
-                good customer support. A reliable casino usually offers 24/7
-                support to players via online chat and other means of
-                communication. The ability to get the necessary support allows
-                an establishment to retain more players. Also, pay attention to
-                the selection of games and the variety of game providers.
-                Renowned software providers such as playtech, microgaming, and
-                Rival regularly audit and update their software to ensure
-                players are treated fairly. Thus, you can rest assured that you
-                will always have a fair game. On the other hand, new casinos
-                that use games from new software companies can let you
-                experience new game styles.
+                Casino bonuses and loyalty also play deeply for many players
+                while making their decision on what is the best. I personally do
+                not like any bonuses attached to my deposits as nearly all of
+                them place restrictions on what I can cash out if I win a large
+                sum, and I have won sums over $200,000 while playing online and
+                would feel sick if they told me I could only cash out a small
+                portion of that.
               </p>{" "}
-              <b>Why choose new online casinos</b>{" "}
+              <b>Why choose only the best?</b>{" "}
               <p>
-                Many online players value a big supply of games, fast
-                withdrawals, and big bonuses. And that’s exactly what new
-                casinos offer. Nowadays, to keep the players happy is like the
-                main requirement. That’s why new casinos try to offer the most
-                beneficial terms for playing games on their platforms and thus,
-                make their players come back. The casinos we list on our website
-                hold to high standards, and you can easily get access to them at
-                any time you want. Just pick a casino and enjoy the games. If
-                you are trying out a new, unrated casino, make sure you leave
-                your review after your gaming experience so that other players
-                could know what to expect. If you are a novice player, look
-                through our Casino guides, join our forum or the community of
-                players who love to gamble. It will help you quickly become an
-                expert player.{" "}
+                I think its fun to try many casinos, so picking the best is
+                great if they offer everything your looking for but sometimes it
+                seems like trying a new casino is new start and seems to
+                sometimes pay out better even with the same games. I see players
+                from 2004 that stick with the same casino over this entire
+                period so that speaks well to those casinos but its like playing
+                at brick and mortar casinos, sometimes its fun to try another.{" "}
               </p>
             </div>
             <ProsCons data={prosCons} />

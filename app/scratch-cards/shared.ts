@@ -1,5 +1,5 @@
 import prisma from "@/client";
-import { ScratchCardGame, User } from "@prisma/client";
+import { User } from "@prisma/client";
 import {
   addHours,
   formatDistanceToNowStrict,
@@ -57,7 +57,18 @@ export async function isReadyForPlay(user: User): Promise<{
       createdAt: "desc",
     },
   });
-  
+
+  const limit = await prisma.site_setting.findFirst({
+    where: {
+      name: "scratch_limit",
+    },
+  });
+
+  let hardLimit = Number(limit?.value) ?? 5;
+  if (isNaN(hardLimit)) {
+    hardLimit = 5;
+  }
+
   const lastFreePlay = await prisma.scratchCardGame.findFirst({
     where: {
       user_id: user.id,
@@ -71,7 +82,7 @@ export async function isReadyForPlay(user: User): Promise<{
   const usdWinCount = await prisma.scratchCardAward.count({
     where: { createdAt: { gte: startOfMonth(new Date()) } },
   });
-  const canWinCash = usdWinCount < 8;
+  const canWinCash = usdWinCount < hardLimit;
 
   const freePlayAt =
     lastFreePlay == null ? new Date() : addHours(lastFreePlay.createdAt, 1);

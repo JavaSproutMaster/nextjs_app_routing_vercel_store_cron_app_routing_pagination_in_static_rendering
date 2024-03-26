@@ -1,120 +1,115 @@
-import Image from "next/legacy/image";
-import Link from "next/link";
 import { _avg } from "@/app/lib/Aggregation";
+import { textWrap } from "@/app/lib/TextWrap";
+import Image from "next/image";
+import Link from "next/link";
 import { BsFillStarFill } from "react-icons/bs";
 import { VscStarEmpty } from "react-icons/vsc";
-import { AiFillExclamationCircle } from "react-icons/ai";
-import { textWrap } from "@/app/lib/TextWrap";
-
-const LikeSlots = ({data, loadMoreData}) => {
-
+import { LoadMoreButton } from "@/app/components/loadMoreButton";
+import { PlayCasinoLink } from "./PlayCasinoLink";
+const LikeSlots = ({ data, loadMoreData }) => {
   const games = data.games;
-  
+  let totalGames = games.length;
+  let endOfGames = 0;
+  if (data?.pageNum * 5 !== totalGames) {
+    endOfGames = 1;
+  }
   const casino = data.casinoData?.casinoname;
   const casinoId = data.casinoData?.casinoid;
-  const bonusLink =
-    "https://www.allfreechips.com/play_casino" + casinoId + ".html";
+  const casinoClean = data.casinoData?.clean_name;
 
   const ratings = games?.map((g, index) => {
     return _avg(g?.game_ratings);
-  }); 
-  
+  });
 
   return (
     <>
-      {games?.length > 0 && games?.map((g, index) => (
-        <div
-        key={g.game_id}
-          className="flex flex-col rounded-2xl md:flex-row border-2 items-center p-6 my-6 md:px-20 justify-between"
-        >
-          <span>
-            <Image
-              unoptimized // avoids getting charged
-              alt={g.game_name + " logo"}
-              width={240}
-              height={160}
-              src={`https://www.allfreechips.com/image/sloticonssquare/${encodeURIComponent(
-                g.game_image
-              )}`}
-            />
-          </span>
-          <div className="flex flex-col items-center">
-            <h5 className="my-4">{g.software.software_name}</h5>
-            <h3 className="text-4xl">{textWrap(g.game_name, 15)}</h3>
-            <div className="flex md:flex-col items-center justify-between">
-              <div className="flex items-center space-x-1 my-4">
-              {[1, 2, 3, 4, 5].map((value) => (
-                <div key={value}>
-                    {ratings[index] >= value && (
-                      <BsFillStarFill />
-                    )}
-                    {ratings[index] < value && ratings[index] > (value - 0.5) && (
-                      <BsFillStarFill />
-                    )}
-                    {ratings[index] < value && (
-                      <VscStarEmpty />
-                    )}
+      {games?.length > 0 &&
+        games?.map((g, index) => (
+          <div
+            key={index}
+            className="my-6 flex flex-col items-center justify-between rounded-2xl border-2 p-6 md:flex-row md:px-20"
+          >
+            <span>
+              <Image
+                unoptimized
+                alt={g.game_name + " logo"}
+                width={240}
+                height={160}
+                src={`/image/sloticonssquare/${encodeURIComponent(
+                  g.game_image,
+                )}`}
+              />
+            </span>
+            <div className="flex flex-col items-center">
+              <b className="my-4">{g.software.software_name}</b>
+              <b className="text-4xl">{textWrap(g.game_name, 15)}</b>
+              <div className="flex items-center justify-between md:flex-col">
+                <div className="my-4 flex items-center space-x-1">
+                  {[1, 2, 3, 4, 5].map((value, i) => (
+                    <div key={i}>
+                      {ratings[index] >= value && <BsFillStarFill />}
+                      {ratings[index] < value &&
+                        ratings[index] > value - 0.5 && <BsFillStarFill />}
+                      {ratings[index] < value && <VscStarEmpty />}
+                    </div>
+                  ))}
+                  <p className="">{ratings[index]?.toFixed(2)}</p>
                 </div>
-                ))}
-                <p className="">{ratings[index]?.toFixed(2)}</p>
-              </div>
-              <div className="flex items-center space-x-3">
+                <div className="flex items-center space-x-3">
                   <Link
-                    href={`../slot/${encodeURIComponent(g.game_clean_name)}`}
+                    href={`../slots/${encodeURIComponent(g.game_clean_name)}`}
                     type="button"
-                    className="rounded-full bg-sky-700 text-white dark:bg-white dark:text-black py-2 px-4 my-6"
+                    className="my-6 rounded-full bg-sky-700 px-4 py-2 text-white dark:bg-white dark:text-black"
                   >
                     Slot Review
                     {/* <span key={index} className="word" style={{color: "#21669e",
                   textShadow: "2px 2px #444444, 1px 1px 4px black, 0 0 4px black"}}>Slot Review</span> */}
                   </Link>
+                </div>
               </div>
             </div>
-          </div>
-          <div className="flex flex-col items-center">
-            <div className="flex items-center my-4">
-              <div className="flex flex-col items-center">
-                <span className="text-4xl">{g.game_lines}</span>
-                <span className="font-normal text-xs">Gamelines</span>
+            <div className="flex flex-col items-center">
+              <div className="my-4 flex items-center">
+                <div className="flex flex-col items-center">
+                  <span className="text-4xl">{g.game_lines}</span>
+                  <span className="text-xs font-normal">Game lines</span>
+                </div>
+                <hr className="w-10 rotate-90 border-sky-700 dark:border-white" />
+                <div className="flex flex-col items-center">
+                  <span className="text-4xl">{g.game_reels}</span>
+                  <span className="text-xs font-normal">Game reels</span>
+                </div>
+                <hr className="w-10 rotate-90 border-sky-700 dark:border-white" />
+                <p className="text-base font-normal leading-5">
+                  Game
+                  <br />
+                  details
+                </p>
               </div>
-              <hr className="border-sky-700 dark:border-white w-10 rotate-90" />
-              <div className="flex flex-col items-center">
-                <span className="text-4xl">{g.game_reels}</span>
-                <span className="font-normal text-xs">Gamereels</span>
-              </div>
-              <hr className="border-sky-700 dark:border-white w-10 rotate-90" />
-              <p className="font-normal text-base leading-5">
-                Game
-                <br />
-                details
-              </p>
+              {casinoClean ? (
+                <>
+                  <PlayCasinoLink
+                    casinoId={casinoClean}
+                    className="my-6 bg-sky-700 px-20 py-2 text-white dark:bg-white dark:text-black"
+                  >
+                    Play Now
+                  </PlayCasinoLink>
+                  <p className="text-base font-normal">
+                    On {casino}&#39;s secure site
+                  </p>
+                </>
+              ) : null}
             </div>
-            <Link
-              href={bonusLink}
-              rel="noreferrer"
-              target="_blank"
-              type="button"
-              className="bg-sky-700 text-white dark:bg-white dark:text-black py-2 px-20 my-6"
-            >
-              Play Now
-            </Link>
-            <p className="font-normal text-base">
-              On {casino}&#39;s secure site
-            </p>
           </div>
-        </div>
-      ))}
-      {parseInt(data?.gameTotalCount) > games?.length && 
-      <form action={loadMoreData} className="text-center">
-        <input type="hidden" name="pageNumber" value={data?.pageNum} /> 
-        <button
-          type="submit" 
-          className="text-center my-8 cursor-pointer"
-          >Show More</button>
-      </form>
-      }
-      </>
+        ))}
+      {endOfGames == 0 ? (
+        <form action={loadMoreData} className="text-center">
+          <input type="hidden" name="pageNumber" value={data?.pageNum} />
+          <LoadMoreButton text="Show More Slots" />
+        </form>
+      ) : null}
+    </>
   );
-}
+};
 
 export default LikeSlots;

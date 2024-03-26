@@ -1,17 +1,13 @@
-import React, { useState } from "react";
-import Link from "next/link";
 import Image from "next/legacy/image";
+import Link from "next/link";
 import { BsArrowRightCircleFill } from "react-icons/bs";
-import Currency from "./functions/currency";
 import { FaChevronCircleDown, FaChevronCircleUp } from "react-icons/fa";
 import { BonusItemTerms } from "./BonusItemTerms";
+import Currency from "./functions/currency";
+import { PlayCasinoLink } from "./PlayCasinoLink";
 function BonusItem(props) {
-  const bonusTerms =
-    "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec volutpat elit vel tellus eleifend imperdiet. Donec consectetur urna sed neque rhoncus dapibus. Aenean nunc erat, lobortis a ex dignissim, scelerisque malesuada odio. Sed vestibulum dictum eleifend.";
-
-  const casinologo =
-    "https://www.allfreechips.com/image/casinoiconscut/" +
-    props.data.buttondata;
+  const bonusTerms = "";
+  const casinologo = "/image/casinoiconscut/" + props.data.buttondata;
   const casinobonusalt = props.data.casinoname + " Casino Bonus";
   return (
     <div id="bonusList">
@@ -20,15 +16,11 @@ function BonusItem(props) {
         var infoLine = currency + "20";
         var infoLine2 = "Min. deposit";
 
-        var bonusLink =
-          "https://www.allfreechips.com/play_casino" + d.parent + ".html";
         if (d.code) {
           var infoLine = "" + d.code;
           var infoLine2 = "Bonus Code";
         }
-        if (d.link) {
-          var bonusLink = "" + d.link;
-        }
+
         var bname = "Free";
         var bnameTwo = "Spins";
         var bonusValue = "" + d.freespins;
@@ -46,17 +38,18 @@ function BonusItem(props) {
         return (
           <div
             key={d.id}
-            className="flex flex-col border border-gray-200 my-4 px-6 py-2"
+            className="my-4 flex flex-col border border-gray-200 px-6 py-2"
           >
             <div className="flex flex-col  rounded-md md:flex-row md:justify-between">
-              <div className="flex items-center my-2 ">
+              <div className="my-2 flex items-center ">
                 <Image
+                  unoptimized
                   src={casinologo}
                   alt={casinobonusalt}
                   width="100"
                   height="80"
                 />
-                <div className="flex text-5xl items-center">
+                <div className="flex items-center text-5xl">
                   {bonusValue}
                   <div className="flex flex-col">
                     <span className="text-sm">{bname}</span>
@@ -64,34 +57,32 @@ function BonusItem(props) {
                   </div>
                 </div>
               </div>
-              <div className="flex justify-center space-x-1 items-center my-4">
+              <div className="my-4 flex items-center justify-center space-x-1">
                 <div className="flex flex-col items-center">
                   <span className="text-2xl">{infoLine}</span>
                   <span className="text-xs font-light">{infoLine2}</span>
                 </div>
-                <hr className="border-sky-200 dark:border-white w-10 h-1 rotate-90" />
+                <hr className="h-1 w-10 rotate-90 border-sky-200 dark:border-white" />
                 <div className="flex flex-col items-center">
                   <span className="text-2xl">{d.playthrough}x</span>
                   <span className="text-xs font-light">Playthrough</span>
                 </div>
               </div>
 
-              <Link
-                href={bonusLink}
-                rel="noreferrer"
-                target="_blank"
-                type="button"
-                className="bg-sky-700 text-white dark:bg-white dark:text-black px-10 py-3 rounded-lg my-6 flex items-center justify-center"
+              <PlayCasinoLink
+                href={d.link ? d.link : undefined}
+                casinoId={props?.data.clean ?? ""}
+                className="my-6 flex items-center justify-center rounded-lg bg-sky-700 px-10 py-3 text-white dark:bg-white dark:text-black"
               >
                 Claim Now
                 <BsArrowRightCircleFill className="mx-4" />
-              </Link>
+              </PlayCasinoLink>
             </div>
-            <BonusItemTerms
+            {/* <BonusItemTerms
               bonusTerms={bonusTerms}
               open={<FaChevronCircleDown />}
               close={<FaChevronCircleUp />}
-            />
+            /> */}
           </div>
         );
       })}

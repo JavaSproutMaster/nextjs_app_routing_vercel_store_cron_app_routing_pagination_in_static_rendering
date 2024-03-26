@@ -1,30 +1,28 @@
-import React from "react";
+import prisma from "@/client";
+import Author from "@/components/AboutAuthor";
+import BonusSlider from "@/components/BonusSlider";
+import Bonus3 from "@/components/Bonus3";
+import FaqJsonLD from "@/components/FaqJsonLDX";
+import ProSchema from "@/components/ProJsonLDX";
+import ProsCons from "@/components/ProsCons";
 import Faq from "@/components/faq";
 import BonusFilter from "@/components/functions/bonusfilter";
-import CasinoDisplayList from "@/components/CasinoDisplayList";
+import monthYear from "@/components/functions/monthYear";
+import { Metadata } from "next";
 import Link from "next/link";
 import { CgMenuLeft } from "react-icons/cg";
-import { GrClose } from "react-icons/gr";
-import monthYear from "@/components/functions/monthYear";
-import Author from "@/components/AboutAuthor";
-import ProsCons from "@/components/ProsCons";
-import FaqJsonLD from "@/components/FaqJsonLDX";
-import prisma from "@/client";
-import MobileJump from "../components/MobileJump";
-import { Metadata } from "next";
-import BonusSlider from "@/components/BonusSlider";
 import { FaArrowCircleRight } from "react-icons/fa";
-import ProSchema from "@/components/ProJsonLDX";
-
-
+import { GrClose } from "react-icons/gr";
+import MobileJump from "../components/MobileJump";
 
 //added to synch
 async function getProps({ params }) {
- 
   const data = await prisma.casino_p_casinos.findMany({
     where: {
       approved: 1,
       rogue: 0,
+      vercel_image_url: { not: null },
+      vercel_casino_button: { not: null },
       bonuses: {
         some: { percent: { gt: 399 } },
       },
@@ -37,13 +35,13 @@ async function getProps({ params }) {
       new: true,
       button: true,
       bonuses: {
-        orderBy: { deposit: "desc" },
+        orderBy: { percent: "desc" },
       },
       casino_ratings: {
         select: {
-          rating: true
-        }
-      }
+          rating: true,
+        },
+      },
     },
     take: 45,
   });
@@ -59,6 +57,7 @@ export async function generateMetadata({ params }): Promise<Metadata> {
     monthYear() +
     ".";
   return {
+    metadataBase: new URL("https://www.allfreechips.com"),
     title: Title,
     description: description,
   };
@@ -117,33 +116,32 @@ export default async function PageOut(params) {
   ];
 
   return (
-    <div className="md:container mx-auto text-sky-700 dark:text-white">
+    <div className="mx-auto text-sky-700 md:container dark:text-white">
       <FaqJsonLD data={faq} />
-      <ProSchema prosCons = {prosCons} name = "Big Bonuses" product ="Casinos with Large Bonuses" />
-      <section className="py-8  px-6">
+      <ProSchema
+        prosCons={prosCons}
+        name="Big Bonuses"
+        product="Casinos with Large Bonuses"
+      />
+      <section className="px-6  py-8">
         <div className="container mx-auto">
-          <h1 className="text-4xl md:text-5xl font-semibold border-b border-blue-800 dark:border-white pb-12">
-            TOP 400% and greater casinos bonuses for {monthYear()}
+          <h1 className="border-b border-blue-800 pb-12 text-4xl font-semibold md:text-5xl dark:border-white">
+            TOP 400% and greater casino bonuses for {monthYear()}
           </h1>
           <div className="flex flex-col py-4">
-            <span className="">
-              Author:{" "}
-              <a href="#author" className="font-medium ">
-                {author}
-              </a>
-            </span>
+            <span className="">Author: </span>
             <span className="text-sky-600 dark:text-white">{reviewDate}</span>
           </div>
-          <div className="bg-slate-100 dark:bg-gray-200 dark:text-black rounded-xl mt-3">
+          <div className="mt-3 rounded-xl bg-slate-100 dark:bg-gray-200 dark:text-black">
             <div className="card p-4">
-              <div className="heading flex items-center border-b gap-7 pb-4">
-                <span className="w-10 h-7 rounded bg-sky-700 dark:bg-zinc-800"></span>
+              <div className="heading flex items-center gap-7 border-b pb-4">
+                <span className="h-7 w-10 rounded bg-sky-700 dark:bg-zinc-800"></span>
                 <h2 className="text-lg">
                   Why you should play{" "}
                   <span className="font-bold">Giant Bonus Casinos</span>
                 </h2>
               </div>
-              <p className="font-normal pt-4 pb-2 text-justify md:text-xl md:p-6">
+              <p className="pb-2 pt-4 text-justify font-normal md:p-6 md:text-xl">
                 The large casino bonus promotions like the 400% and greater
                 casino bonuses found here are great fun if you enjoy play time.
                 Take careful not of any requirements such as allowed games to
@@ -158,19 +156,19 @@ export default async function PageOut(params) {
         links={{ links }}
         close={<GrClose className="dark:bg-white" />}
         left={
-          <CgMenuLeft className="text-white dark:text-black mx-2 text-xl" />
+          <CgMenuLeft className="mx-2 text-xl text-white dark:text-black" />
         }
       />
 
-      <section className="flex flex-col mx-4 md:flex-row">
-        <div className="hidden md:w-1/4 md:flex md:flex-col md:">
+      <section className="mx-4 flex flex-col md:flex-row">
+        <div className="md: hidden md:flex md:w-1/4 md:flex-col">
           <div
             className="md:flex md:flex-col"
             style={{ position: "sticky", top: "140px" }}
           >
-            <span className="text-lg font-medium p-4">ON THIS PAGE</span>
-            <hr className="border-sky-700 dark:border-white w-60" />
-            <span className="my-4 px-4 border-l-4 font-medium border-sky-700 dark:border-white">
+            <span className="p-4 text-lg font-medium">ON THIS PAGE</span>
+            <hr className="w-60 border-sky-700 dark:border-white" />
+            <span className="my-4 border-l-4 border-sky-700 px-4 font-medium dark:border-white">
               Our top 400% and greater casino bonus offers
             </span>
             <div className="my-4 flex flex-col space-y-4">
@@ -182,33 +180,33 @@ export default async function PageOut(params) {
             </div>
           </div>
         </div>
-        <div className="lg:w-3/4  text-lg md:text-xl font-medium">
+        <div className="text-lg  font-medium md:text-xl lg:w-3/4">
           <div className="flex flex-col rounded-lg">
-          <p className="py-4 font-bold my-4 md:my-8">
-              Hot Bonuses Right Now
-            </p>
-            <BonusSlider FaArrowCircleRight = {<FaArrowCircleRight className="mx-2" />} casinos={bdata} />
-            <p className="py-4 font-bold my-4 mdmy-8">
+            <p className="my-4 py-4 font-bold md:my-8">Hot Bonuses Right Now</p>
+            <BonusSlider
+              FaArrowCircleRight={<FaArrowCircleRight className="mx-2" />}
+              casinos={bdata}
+            />
+            <p className="mdmy-8 my-4 py-4 font-bold">
               Complete Large Casino Bonus List
             </p>
-            <CasinoDisplayList  data={bdata} />
+            <Bonus3 data={bdata} />
           </div>
 
           <div>
-            <div className="py-4 font-bold my-4 md:my-8">
+            <h3 className="border-b border-blue-800 pb-12 text-4xl font-semibold md:text-5xl dark:border-white">
               Details about casino with 400% or larger bonuses
-            </div>
+            </h3>
             <ProsCons data={prosCons} />
             <Faq data={faq} />
-            <Author data={authorData} />
           </div>
         </div>
       </section>
-      <div className="text-left p-4 mt-2 md:mx-24 md:text-2xl">
-        <h3 className="text-2xl font-semibold md:text-5xl">
+      <div className="mt-2 p-4 text-left md:mx-24 md:text-2xl">
+        <h4 className="text-2xl font-semibold md:text-5xl">
           Use this casino guide to get huge bonuses
-        </h3>
-        <p className="text-base font-medium my-6 text-justify md:text-2xl md:font-normal">
+        </h4>
+        <p className="my-6 text-justify text-base font-medium md:text-2xl md:font-normal">
           These big gigantic 400% plus online casino bonuses are great fun and a
           challenge. Allfreechips delivers a comprehensive casino guide to help
           navigate all you need to know about playing these bonus casinos
@@ -220,6 +218,7 @@ export default async function PageOut(params) {
           <li>type of software used;</li>
           <li>comprehensive reviews and rates.</li>
         </ul>
+        <Author data={authorData} />
       </div>
     </div>
   );

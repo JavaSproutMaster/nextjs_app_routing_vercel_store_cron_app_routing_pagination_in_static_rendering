@@ -1,53 +1,90 @@
-
-import prisma from "@/client";
 import ContactForm from "../components/ContactForm";
+import { Metadata } from "next";
+export async function generateMetadata({ params }): Promise<Metadata> {
+  const Title = "Allfreechips Contact page";
+  const description = "Allfreechips Contact page.";
 
+  return {
+    metadataBase: new URL("https://www.allfreechips.com"),
+    title: Title,
+    description: description,
+    robots: {
+      index: false,
+      follow: false,
+      nocache: true,
+    },
+  };
+}
 export default async function Dash() {
+  async function sendMessage({ name, email, message }) {
+    "use server";
+    const result = {
+      data: {
+        author: email,
+        name: name,
+        message: message,
+        toEmail: "support@allfreechips.com",
+      },
+    };
 
-    async function sendMessage ({name, email, message}) {
-        "use server";
-        try {
-            const result = await prisma.contactMessage.create({
-                data: {
-                    author: { connect: { email: email } },
-                    name: name,
-                    message: message,
-                    toEmail: "support@allfreechips.com"
-                }
-            });
-            return result;
-        }
-        catch(error) {
-          console.log(error)
-          return false;
-        } 
-      }
+    const nodemailer = require("nodemailer");
 
-    return (            
-        <section className="relative py-12 bg-gray-50 overflow-hidden">
-            <div className="relative z-10 container px-4 mx-auto">
-                <div className="flex flex-wrap -m-8">
-                    <div className="w-full md:w-1/2 p-8">
-                        <div className="flex flex-col justify-between h-full">
-                            <div className="mb-12 md:max-w-md block">
-                                <p className="my-6 text-sm text-sky-600 font-bold uppercase tracking-px" >Get a question?</p>
-                                <p className="mb-6 text-sm text-sky-600 font-bold uppercase tracking-px" >Feel free to contact us!</p>
-                                <h2 className="text-3xl md:text-5xl xl:text-7xl font-bold font-heading tracking-px-n leading-none" >Get in touch and let us know how we can help.</h2>
-                                <h2 className="text-2xl mt-8">Submit your info and we&apos;ll get back to you as soon as possible.</h2>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="w-full md:w-1/2 p-8">
-                        <ContactForm sendMessage={sendMessage}/>
-                    </div>
-                </div>
+    const transporter = nodemailer.createTransport({
+      host: process.env.EMAIL_SERVER_HOST,
+      port: 465,
+      secure: true,
+      auth: {
+        user: process.env.EMAIL_SERVER_USER,
+        pass: process.env.EMAIL_SERVER_PASSWORD,
+      },
+    });
+
+    // resend.emails.send({
+    //   from: email,
+    //   to: "chris@trenkas.com",
+    //   subject: "Allfreechips Support Message",
+    //   html: message,
+    // });
+
+    const info = await transporter.sendMail({
+      from: "support@allfreechips.com", // sender address
+      to: "support@allfreechips.com", // list of receivers
+      subject: "Allfreechips Support Request ✔", // Subject line
+      text: email + " " + message, // plain text body
+      html: email + " " + message, // html body
+    });
+
+    return result;
+  }
+
+  return (
+    <section className="relative overflow-hidden bg-gray-50 py-12">
+      <div className="container relative z-10 mx-auto px-4">
+        <div className="-m-8 flex flex-wrap">
+          <div className="w-full p-8 md:w-1/2">
+            <div className="flex h-full flex-col justify-between">
+              <div className="md:max-w-md mb-12 block">
+                <p className="tracking-px my-6 text-sm font-bold uppercase text-sky-600">
+                  Get a question?
+                </p>
+                <p className="tracking-px mb-6 text-sm font-bold uppercase text-sky-600">
+                  Feel free to contact us!
+                </p>
+                <h1 className="font-heading tracking-px-n text-3xl font-bold leading-none md:text-5xl xl:text-7xl">
+                  Get in touch and let us know how we can help.
+                </h1>
+                <h2 className="mt-8 text-2xl">
+                  Submit your info and we&apos;ll get back to you as soon as
+                  possible.
+                </h2>
+              </div>
             </div>
-        </section>
+          </div>
+          <div className="w-full p-8 md:w-1/2">
+            <ContactForm sendMessage={sendMessage} />
+          </div>
+        </div>
+      </div>
+    </section>
   );
 }
-
-export const metadata = {
-  title: "Allfreechips Casino Content",
-  description:
-    "",
-};

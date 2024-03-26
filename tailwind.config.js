@@ -6,19 +6,18 @@ module.exports = {
     "./components/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
-    maxWidth:{
-      '1/2': '50%'
+    maxWidth: {
+      "1/2": "50%",
     },
     screens: {
-      sm: '320px',
-      md: '768px',
-      lg: '1024px',
-      xl: '1280px',
+      sm: "320px",
+      md: "768px",
+      lg: "1024px",
+      xl: "1280px",
     },
     extend: {},
   },
-  plugins: [require("tw-elements/dist/plugin.cjs")],
   variants: {
-    gap: ['responsive', 'hover', 'focus'],
-  }
+    gap: ["responsive", "hover", "focus"],
+  },
 };

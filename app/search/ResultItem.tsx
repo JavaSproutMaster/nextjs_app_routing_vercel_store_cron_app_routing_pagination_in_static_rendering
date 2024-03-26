@@ -1,11 +1,8 @@
-import React, { useState } from "react";
-import Casino from "../../components/SoftBox";
-import { useEffect } from "react";
-import { title } from "process";
+import React, { useEffect, useState } from "react";
 
 interface props {
-    type: number,
-    item: any
+  type: number;
+  item: any;
 }
 
 const ResultItem: React.FC<props> = ({ type, item }) => {
@@ -27,19 +24,19 @@ const ResultItem: React.FC<props> = ({ type, item }) => {
   }, [type]);
 
   return (
-    <div className="relative mx-auto w-full max-w-sm pt-2">
+    <div className="max-w-sm pt- relative mx-auto w-full">
       {type == 1 && (
         <a
-          href={`/review/${item[imgUrl]}`}
+          href={`/casinos/${item[imgUrl]}`}
           className="relative inline-block w-full transform transition-transform duration-300 ease-in-out"
         >
           <div className="rounded-lg">
-            <div className="relative flex h-30 justify-center overflow-hidden rounded-t-lg">
+            <div className="h-30 relative flex justify-center overflow-hidden rounded-t-lg">
               <div className="w-full transform transition-transform duration-500 ease-in-out hover:scale-110">
                 {item?.button && (
                   <picture>
                     <img
-                      src={`/images/casino/icons/${item?.button}`}
+                      src={`/image/casinoiconscut/${item?.button}`}
                       width={400}
                       alt={item?.casino}
                     />
@@ -54,15 +51,11 @@ const ResultItem: React.FC<props> = ({ type, item }) => {
             <div className="flex items-center">
               <div className="relative">
                 {item?.meta && item?.meta[0]?.title && (
-                  <h2
-                    className="text-base font-medium text-gray-800 md:text-lg"
-                  >
+                  <h2 className="text-base font-medium text-gray-800 md:text-lg dark:text-zinc-100">
                     {item?.meta[0]?.title}
                   </h2>
                 )}
-                <p
-                  className="mt-2 line-clamp-1 text-sm text-gray-800"
-                >
+                <p className="mt-2 line-clamp-1 text-sm text-gray-800 dark:text-zinc-100">
                   {item[name]}
                 </p>
               </div>
@@ -72,16 +65,16 @@ const ResultItem: React.FC<props> = ({ type, item }) => {
       )}
       {type == 2 && (
         <a
-          href={`/slot/${item[imgUrl]}`}
+          href={`/slots/${item[imgUrl]}`}
           className="relative inline-block w-full transform transition-transform duration-300 ease-in-out"
         >
           <div className="rounded-lg">
-            <div className="relative flex h-30 justify-center overflow-hidden rounded-t-lg">
+            <div className="h-30 relative flex justify-center overflow-hidden rounded-t-lg">
               <div className="w-full transform transition-transform duration-500 ease-in-out hover:scale-110">
                 {item?.game_image && (
                   // eslint-disable-next-line @next/next/no-img-element
                   <img
-                    src={`/images/slot/${item?.game_image}`}
+                    src={`/image/sloticonssquare/${item?.game_image}`}
                     alt={item?.casino}
                   />
                 )}
@@ -94,15 +87,11 @@ const ResultItem: React.FC<props> = ({ type, item }) => {
             <div className="flex items-center">
               <div className="relative">
                 {item?.meta && item?.meta[0]?.title && (
-                  <h2
-                    className="text-base font-medium text-gray-800 md:text-lg"
-                  >
+                  <h2 className="text-base font-medium text-gray-800 md:text-lg dark:text-zinc-100">
                     {item?.meta[0]?.title}
                   </h2>
                 )}
-                <p
-                  className="mt-2 line-clamp-1 text-sm text-gray-800"
-                >
+                <p className="mt-2 line-clamp-1 text-sm text-gray-800 dark:text-zinc-100">
                   {item[name]}
                 </p>
               </div>
