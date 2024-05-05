@@ -1,16 +1,15 @@
 import "../styles/globals.css";
 import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
+import { Metadata } from "next";
 import Footer from "../components/Footer";
 import AuthContext from "./AuthContext";
 import Header from "./Header";
-import { Metadata } from "next";
-import ShowProfilePannel from "./components/headerClient/ShowProfilePannel";
-import { getServerSession } from "next-auth";
-import { authOptions } from "./api/auth/[...nextauth]/auth";
 import FullModal from "./components/FullModal";
-import SearchResult from "./search/SearchResult";
 import MobileMenuBar from "./components/headerClient/MobileMenuBar";
+import ShowProfilePannel from "./components/headerClient/ShowProfilePannel";
+import SearchResult from "./search/SearchResult";
+import { Suspense } from "react";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://www.allfreechips.com"),
@@ -21,8 +20,6 @@ export const metadata: Metadata = {
 };
 
 export default async function RootLayout({ children }) {
-  const session = await getServerSession(authOptions);
-
   return (
     <html lang="en">
       <body>
@@ -32,12 +29,17 @@ export default async function RootLayout({ children }) {
             <div className="content" id="afc-main">
               {children}
             </div>
-
-            <ShowProfilePannel session={session} />
-            <MobileMenuBar />
-            <FullModal>
-              <SearchResult />
-            </FullModal>
+            <Suspense>
+              <ShowProfilePannel />
+            </Suspense>
+            <Suspense>
+              <MobileMenuBar />
+            </Suspense>
+            <Suspense>
+              <FullModal>
+                <SearchResult />
+              </FullModal>
+            </Suspense>
           </AuthContext>
           <Footer />
         </div>

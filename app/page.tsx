@@ -26,7 +26,7 @@ export async function generateMetadata({ params }): Promise<Metadata> {
     openGraph: { type: "website" },
   };
 }
-export const revalidate = 0;
+export const revalidate = 7200;
 export default async function Page() {
   const settings = await Settings();
   const cardData = {

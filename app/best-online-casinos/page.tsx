@@ -49,8 +49,7 @@ async function getProps({ params }) {
   return { bonus };
 }
 
-export const revalidate = 60;
-export const dynamic = "force-static";
+export const revalidate = 72000;
 
 export async function generateMetadata({ params }): Promise<Metadata> {
   const Title =

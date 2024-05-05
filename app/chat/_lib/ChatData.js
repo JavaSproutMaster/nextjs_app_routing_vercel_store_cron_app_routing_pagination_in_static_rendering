@@ -106,7 +106,7 @@ export const EditIcon = () => {
       viewBox="0 0 24 24"
       xmlns="http://www.w3.org/2000/svg"
       aria-hidden="true"
-      className="h-5 w-5 [color]-$fill-color"
+      className="[color]-$fill-color h-5 w-5"
       style={{
         strokeWidth: "var(--grid-item-icon-stroke-width)",
         transform: "scale(var(--grid-item-icon-scale))",
@@ -130,7 +130,7 @@ export const DeleteIcon = () => {
       viewBox="0 0 24 24"
       xmlns="http://www.w3.org/2000/svg"
       aria-hidden="true"
-      className="h-5 w-5 [color]-$fill-color"
+      className="[color]-$fill-color h-5 w-5"
       style={{
         strokeWidth: "var(--grid-item-icon-stroke-width)",
         transform: "scale(var(--grid-item-icon-scale))",
@@ -154,24 +154,25 @@ export const ReplyIcon = () => {
       viewBox="0 0 24 24"
       xmlns="http://www.w3.org/2000/svg"
       aria-hidden="true"
-      className="h-5 w-5 [color]-$fill-color"
+      className="[color]-$fill-color h-5 w-5"
       style={{
         strokeWidth: "var(--grid-item-icon-stroke-width)",
         transform: "scale(var(--grid-item-icon-scale))",
       }}
     >
-        <path strokeLinecap="round" strokeLinejoin="round" d="M9 15 3 9m0 0 6-6M3 9h12a6 6 0 0 1 0 12h-3" />
-
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        d="M9 15 3 9m0 0 6-6M3 9h12a6 6 0 0 1 0 12h-3"
+      />
     </svg>
-    
   );
 };
-
 
 export const NoAvartar = () => {
   return (
     <svg
-      className="absolute w-14 h-14 text-gray-400 -left-1"
+      className="absolute -left-1 h-14 w-14 text-gray-400"
       fill="currentColor"
       viewBox="0 0 20 20"
       xmlns="http://www.w3.org/2000/svg"
@@ -205,7 +206,7 @@ export const EmojiPickerIcon = () => {
 export const SendMessageIcon = () => {
   return (
     <svg
-      className="w-4 h-4 transform rotate-45 -mt-px"
+      className="-mt-px h-4 w-4 rotate-45 transform"
       fill="none"
       stroke="currentColor"
       viewBox="0 0 24 24"

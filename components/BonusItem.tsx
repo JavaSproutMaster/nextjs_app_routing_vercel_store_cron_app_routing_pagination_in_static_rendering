@@ -9,13 +9,15 @@ function BonusItem(props) {
   const bonusTerms = "";
   const casinologo = "/image/casinoiconscut/" + props.data.buttondata;
   const casinobonusalt = props.data.casinoname + " Casino Bonus";
+
   return (
     <div id="bonusList">
       {props.data.bonuslist?.map(function (d, id) {
         var currency = Currency(d.multi_currency);
         var infoLine = currency + "20";
         var infoLine2 = "Min. deposit";
-
+        var bnamethree = d.playthrough + "X";
+        var bvalthree = "Playthrough";
         if (d.code) {
           var infoLine = "" + d.code;
           var infoLine2 = "Bonus Code";
@@ -35,6 +37,18 @@ function BonusItem(props) {
           var bnameTwo = "Bonus";
           var bonusValue = currency + d.deposit;
         }
+
+        if (d.deposit && d.freespins) {
+          var infoLine = "Plus " + d.freespins;
+          var infoLine2 = "Free Spins";
+          if (d.code) {
+            var bnamethree = "" + d.code;
+            var bvalthree = "Bonus Code";
+          }
+        }
+
+        // IF CODE
+
         return (
           <div
             key={d.id}
@@ -64,8 +78,8 @@ function BonusItem(props) {
                 </div>
                 <hr className="h-1 w-10 rotate-90 border-sky-200 dark:border-white" />
                 <div className="flex flex-col items-center">
-                  <span className="text-2xl">{d.playthrough}x</span>
-                  <span className="text-xs font-light">Playthrough</span>
+                  <span className="text-2xl">{bnamethree}</span>
+                  <span className="text-xs font-light">{bvalthree}</span>
                 </div>
               </div>
 

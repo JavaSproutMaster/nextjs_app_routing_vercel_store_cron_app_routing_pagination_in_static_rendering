@@ -7,8 +7,7 @@ import { Metadata } from "next";
 import { redirect } from "next/navigation";
 import Image from "next/image";
 import RecentNewsServer from "@/app/components/news/RecentNewsServer";
-export const revalidate = 300;
-export const dynamic = "force-static";
+export const revalidate = 7200;
 
 export async function generateMetadata({ params }): Promise<Metadata> {
   const props = await getProps({ params });

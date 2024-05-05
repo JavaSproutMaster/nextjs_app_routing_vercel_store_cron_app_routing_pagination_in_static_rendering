@@ -1,7 +1,8 @@
 import { Scratcher } from "./scratcher";
 import { ScratchInfo } from "./scratchInfo";
 import { Metadata } from "next";
-
+import { Suspense } from "react";
+import RandomCasino from "@/components/RandomCasino";
 export async function generateMetadata({ params }): Promise<Metadata> {
   const Title = "Free Play Scratch Cards for real money prizes";
   const description =
@@ -21,6 +22,10 @@ export default function ScratcherPage() {
         </h1>
         <div className="mx-auto text-sky-700 md:container dark:text-white">
           <Scratcher></Scratcher>
+          <Suspense>
+            <RandomCasino count={3} />
+          </Suspense>
+
           <ScratchInfo />
         </div>
       </div>

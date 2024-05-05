@@ -151,11 +151,9 @@ async function getProps({ params }) {
   });
   const bdatav: any[] = LikeCasinoData.filter((p) => p.bonuses.length > 0);
   const bdata = BonusFilter(bdatav);
-
   return { data, bdata, gamedata, swId, gameTotalCount };
 }
-export const revalidate = 60;
-export const dynamic = "force-static";
+export const revalidate = 7200;
 
 export default async function Software({ params }) {
   const props = await getProps({ params });

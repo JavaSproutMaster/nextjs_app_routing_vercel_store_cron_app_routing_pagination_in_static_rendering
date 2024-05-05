@@ -22,7 +22,7 @@ const LikeButton: React.FC<Props> = ({ message, myId, liked, likeMessage }) => {
   return (
     <>
       <button
-        className="inline-flex items-center p-2 text-sm font-medium text-center text-gray-400 bg-white rounded-lg hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-50 dark:bg-gray-900 dark:hover:bg-gray-700"
+        className="inline-flex items-center rounded-lg bg-white p-2 text-center text-sm font-medium text-gray-400 hover:bg-gray-100 focus:outline-none focus:ring-4 focus:ring-gray-50 dark:bg-gray-900 dark:hover:bg-gray-700"
         onClick={() => {
           onLikeButtonClick(message);
         }}
