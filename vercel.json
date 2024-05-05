@@ -1,0 +1,16 @@
+{
+  "crons": [
+    {
+      "path": "/vercel-blob/uploadImages",
+      "schedule": "0 */3 * * *"
+    },
+    {
+      "path": "/vercel-blob/uploadSoftwareAndBankImages",
+      "schedule": "0 */3 * * *"
+    },
+    {
+      "path": "/interlinks",
+      "schedule": "0 */3 * * *"
+    }
+  ]
+}

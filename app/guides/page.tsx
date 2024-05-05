@@ -2,8 +2,7 @@ import Guides from "@/components/Guides";
 
 import monthYear from "@/components/functions/monthYear";
 import { Metadata } from "next";
-export const revalidate = 300;
-export const dynamic = "force-static";
+export const revalidate = 7200;
 
 export async function generateMetadata({ params }): Promise<Metadata> {
   const Title = monthYear() + " Current online gambling guide list";

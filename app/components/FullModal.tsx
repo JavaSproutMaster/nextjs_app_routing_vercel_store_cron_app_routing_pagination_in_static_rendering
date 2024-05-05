@@ -4,19 +4,31 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 
 export default function FullModal({ children }) {
-  const searchParams = useSearchParams();
+  // const searchParams = useSearchParams();
 
-  const showSearchModal = searchParams?.get("showSearchModal");
-  const title = searchParams?.get("searchKey");
+  const [showSearchModal, setShowSearchModal] = useState(false);
   const [key, setKey] = useState("");
   const refTool = useRef<HTMLDivElement>(null);
-  useEffect(() => {
-    if (title) {
-      setKey(title);
-    }
-  }, [title]);
 
   const router = useRouter();
+  useEffect(() => {
+    // Check if window is defined (to ensure code runs only in the browser)
+    if (typeof window !== "undefined") {
+      const searchParams = new URLSearchParams(window.location.search);
+      // Use searchParams as needed
+      let searchKey = searchParams?.get("searchKey");
+      if (searchKey) {
+        setKey(searchKey);
+      }
+      let showSearchModal1 = searchParams?.get("showSearchModal")
+        ? true
+        : false;
+      if (showSearchModal1) {
+        setShowSearchModal(showSearchModal1);
+      }
+    }
+  }, [router]);
+
   const toggle = (e) => {
     e.preventDefault();
     router.push(window.location.pathname);
@@ -38,7 +50,7 @@ export default function FullModal({ children }) {
           className="modal fixed inset-0 z-50 h-full w-full overflow-y-auto bg-gray-900 bg-opacity-60 px-4"
           ref={refTool}
         >
-          <div className="max-w-md relative mx-auto rounded-md bg-white shadow-xl">
+          <div className="max-w-md relative mx-auto rounded-md bg-white  shadow-xl dark:bg-zinc-800">
             <div className="flex items-start justify-between rounded-t p-5">
               <div className="ml-2 mt-2 flex items-center justify-start space-x-4 md:basis-1/4">
                 <div className="relative text-current">
@@ -50,7 +62,7 @@ export default function FullModal({ children }) {
                       value={key}
                       onChange={(e) => changeVal(e)}
                       placeholder="Search"
-                      className="bg-gray text-md h-10 rounded-full border-2 border-gray-500 px-5 pr-10 hover:border-current focus:outline-none sm:w-40 md:w-48"
+                      className="bg-gray text-md h-10 rounded-full border-2 border-gray-500 px-5 pr-10 hover:border-current focus:outline-none sm:w-40 md:w-48 dark:text-zinc-900"
                     />
 
                     <button

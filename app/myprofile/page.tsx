@@ -1,22 +1,20 @@
 import prisma from "@/client";
-import monthYear from "@/components/functions/monthYear";
 import { authOptions } from "@/app/api/auth/[...nextauth]/auth";
 import { Metadata } from "next";
 import { getServerSession } from "next-auth";
 import { revalidatePath } from "next/cache";
 import Profile from "../components/Profile";
-import { addUsername, updateUser } from "../lib/UserFetch";
+import { addUsername, checkNameExist, updateUser } from "../lib/UserFetch";
 export async function generateMetadata({ params }): Promise<Metadata> {
-  const Title = monthYear() + " Current online gambling guide list";
-  const description =
-    "Online casino guides with detailed information on slots, games and bonus types along with how to instructions.";
+  const Title = "User Profile";
+  const description = "User Profile";
   return {
     metadataBase: new URL("https://www.allfreechips.com"),
     title: Title,
     description: description,
   };
 }
-
+export const revalidate = 30;
 export default async function Page() {
   const session = await getServerSession(authOptions);
   let userEmail = session?.user?.email;
@@ -31,6 +29,7 @@ export default async function Page() {
       email: true,
       image: true,
       afcRewards: true,
+      bio: true,
     },
     where: {
       email: userEmail,
@@ -40,11 +39,15 @@ export default async function Page() {
   if (!userEmail) {
     user = null;
   }
-
   if (user && user.email && (!user.name || user.name === "")) {
     const name = await updateUser();
     if (name && name.length > 0) revalidatePath("/myprofile");
   }
-
-  return <Profile user={user} addUsername={addUsername} />;
+  return (
+    <Profile
+      user={user}
+      addUsername={addUsername}
+      checkNameExist={checkNameExist}
+    />
+  );
 }

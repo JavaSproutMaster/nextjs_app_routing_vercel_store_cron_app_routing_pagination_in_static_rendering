@@ -37,7 +37,6 @@ const HeaderClient = ({ mobileIcon }) => {
   const [open, setOpen] = useState(false);
   // get User information.
   const isMounted = useIsMounted();
-
   // search key
   const [searchKey, setSearchKey] = useState("");
   // search key in modal
@@ -162,7 +161,7 @@ const HeaderClient = ({ mobileIcon }) => {
                   value={searchKey}
                   onChange={(e) => changeVal(e)}
                   placeholder="Search"
-                  className="bg-gray text-md h-10 rounded-full border-2 border-gray-500 px-5 pr-10 hover:border-current focus:outline-none sm:w-40 md:w-48"
+                  className="bg-gray text-md h-10 rounded-full border-2 border-gray-500 px-5 pr-10 hover:border-current focus:outline-none sm:w-40 md:w-48 dark:text-zinc-900"
                 />
               </form>
             </div>
@@ -211,13 +210,13 @@ const HeaderClient = ({ mobileIcon }) => {
               value={searchKey}
               onChange={(e) => changeVal(e)}
               placeholder="Search"
-              className="bg-gray text-md h-10 rounded-full border-2 border-gray-500 px-5 pr-10 hover:border-current focus:outline-none sm:w-40 md:w-48"
+              className="bg-gray text-md h-10 rounded-full border-2 border-gray-500 px-5 pr-10 hover:border-current focus:outline-none sm:w-40 md:w-48 dark:text-zinc-900"
             />
 
             <button
               type="submit"
               aria-label="Search"
-              className="absolute right-0 top-0 mr-4 mt-3"
+              className="absolute right-0 top-0 mr-4 mt-3 dark:text-zinc-900"
             >
               <svg
                 className="h-4 w-4 fill-current"

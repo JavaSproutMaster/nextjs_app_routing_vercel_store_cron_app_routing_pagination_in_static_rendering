@@ -2,8 +2,7 @@
 import prisma from "@/client";
 import { Metadata } from "next";
 import Image from "next/image";
-export const revalidate = 60;
-export const dynamic = "force-static";
+export const revalidate = 7200;
 
 export async function generateMetadata({ params }): Promise<Metadata> {
   const Title = "Casino, Slot News";

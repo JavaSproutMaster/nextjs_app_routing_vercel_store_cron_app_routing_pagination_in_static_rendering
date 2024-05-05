@@ -24,7 +24,7 @@ const GridGuide = () => {
         gamblers, not only very fast but the very best casinos of 2024.
       </p>
       <div className="grid grid-cols-2 md:grid md:grid-cols-3">
-        <Link href="/chat">
+        <Link href="/forum">
           <Casino
             icon={<FaComments className="text-4xl" />}
             title={"AFC Chat Forum"}
